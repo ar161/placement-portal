@@ -9,4 +9,7 @@ const roleMiddleware = require('../middleware/roleMiddleware');
 router.get('/add_placement_officer', isAuthenticated, roleMiddleware.checkAdmin, adminController.renderAddPlacementOfficer);
 router.post('/add_placement_officer', isAuthenticated, roleMiddleware.checkAdmin, adminController.addPlacementOfficer);
 
+//View Placement Officer
+router.get('/view_tpo', isAuthenticated, roleMiddleware.checkAdmin, adminController.viewTPOs);
+
 module.exports = router;

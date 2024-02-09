@@ -1,5 +1,6 @@
 // adminController.js
 const userModel = require('../models/userModel');
+const tpoModel = require('../models/tpoModel');
 
 // controllers/adminController.js
 exports.renderAddPlacementOfficer = (req, res) => {
@@ -22,6 +23,18 @@ exports.addPlacementOfficer = (req, res) => {
       // Redirect to the Add Placement Officer Page with a success message
       res.render('admin/add_placement_officer', { error: null, success: 'Placement officer added successfully' });
     });
+};
+
+exports.viewTPOs = (req, res) => {
+  tpoModel.getAllTPOs((err, rows) => {
+      if (err) {
+          console.error('Error fetching TPOs:', err);
+          // Handle error
+          return res.status(500).send('Error fetching TPOs');
+      }
+      // Render the view with TPO data
+      res.render('admin/view_tpo', { tpos: rows });
+  });
 };
   
 
