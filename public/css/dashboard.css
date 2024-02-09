@@ -1,0 +1,111 @@
+/* dashboard.css */
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5em;
+  }
+  
+  .navbar-user {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-user span {
+    margin-right: 10px;
+  }
+  
+  .navbar-user a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px;
+    border: 1px solid #fff;
+    border-radius: 3px;
+  }
+  
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #eee;
+    position: fixed;
+    top: 0;
+    left: -200px;
+    transition: left 0.3s;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-expanded {
+    left: 0;
+  }
+  
+  .sidebar-toggler {
+    cursor: pointer;
+    padding: 10px;
+    font-size: 20px;
+  }
+  
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ddd;
+    cursor: pointer;
+  }
+  
+  .submenu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+  }
+  
+  .submenu-header .arrow {
+    transition: transform 0.3s;
+  }
+  
+  .submenu {
+    display: none;
+    list-style-type: none; /* Remove unordered list dot */
+    padding-left: 20px;
+  }
+
+  .submenu-header .arrow {
+    transition: transform 0.3s;
+  }
+  
+  /* Rotate arrow icon to show submenu opening and closing */
+  .sidebar-item .submenu-header.open .arrow {
+    transform: rotate(180deg);
+  }
+  
+  .sidebar-link {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 8px 0;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar-link:hover {
+    background-color: #ddd;
+  }
+  
+  .main-content {
+    margin-left: 200px;
+    padding: 20px;
+  }
+  

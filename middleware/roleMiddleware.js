@@ -2,7 +2,7 @@
 
 // Author: Raghav Agarwal
 // Date: 18/01/2024
-// Description: Check Role to implement Role Based Access and logout
+// Description: Check Role to implement Role Based Access
 
 const checkRole = (allowedRole) => {
     return (req, res, next) => {

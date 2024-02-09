@@ -1,7 +1,7 @@
 // dashboardController.js
 
-// Author: 
-// Date: 
+// Author: Raghav Agarwal
+// Date: 18/01/2024
 // Description: Dashboard Controller (/get dashboard and redirect to respective dashboard)
 
   exports.dashboardLanding = (req, res) => {
