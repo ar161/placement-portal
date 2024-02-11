@@ -1,9 +1,9 @@
 // placementOfficerController.js
-const db = require('../config/db'); 
+const db = require('../../config/db'); 
 const xlsx = require('xlsx');
 const fs = require('fs');
-const userModel = require('../models/userModel');
-const studentModel = require('../models/studentModel');
+const userModel = require('../../models/userModel');
+const studentModel = require('../../models/studentModel');
 
 exports.renderAddStudent = (req, res) => {
     res.render('placement_officer/add_student', { error: null, success: null });
