@@ -1,7 +1,7 @@
 // app/controllers/authController.js
 
-// Author: Raghav Agarwal
-// Date: 18/01/2024
+// Author: 
+// Date: 
 // Description: Authentication Controller (/get Login, /Post Login, /logout)
 
 const userModel = require('../models/userModel');

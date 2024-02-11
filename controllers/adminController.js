@@ -1,5 +1,4 @@
 // adminController.js
-const userModel = require('../models/userModel');
 const tpoModel = require('../models/tpoModel');
 
 // controllers/adminController.js
@@ -10,7 +9,7 @@ exports.renderAddPlacementOfficer = (req, res) => {
 exports.addPlacementOfficer = (req, res) => {
     const { username, name, email, contactNo } = req.body;
   
-    userModel.createPlacementOfficer(username, name, email, contactNo, (err, results) => {
+    tpoModel.createPlacementOfficer(username, name, email, contactNo, (err, results) => {
       if (err) {
         if (err === 'Username already exists') {
           return res.render('admin/add_placement_officer', { error: 'Username already exists', success: null });
