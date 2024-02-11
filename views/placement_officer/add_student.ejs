@@ -30,10 +30,31 @@
         <input type="email" id="email" name="email" required><br>
         <button type="submit">Add Student</button>
     </form>
+
+    <!-- Button for uploading a file to add multiple students -->
+    <form id="fileForm" action="/placement_officer/add_students_from_file" method="POST" enctype="multipart/form-data">
+      <!-- File input for uploading an Excel file -->
+      <input type="file" id="filePicker" name="file" accept=".xlsx, .xls" style="display: none;">
+      <!-- Button for opening file picker and submitting the form -->
+      <button type="button" onclick="openFilePicker()">Choose File</button>
+    </form>
+    
+    <!-- Button for downloading the Excel template -->
+    <form method="get" action="../../ExcelTemplates/AddStudentTemplate.xlsx">
+      <button type="submit">Download Add Student Template</button>
+    </form>
+
   </div>
 
   <script>
-    // Add any additional scripts for this page if needed
+      function openFilePicker() {
+        // Trigger click event on file input
+        document.getElementById('filePicker').click();
+      }
+    
+      document.getElementById('filePicker').addEventListener('change', function() {
+        document.getElementById('fileForm').submit();
+      });
   </script>
 
 </body>
