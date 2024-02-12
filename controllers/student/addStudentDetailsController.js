@@ -1,6 +1,6 @@
 const studentModel = require('../../models/studentModel');
 
-const studentController = {
+const addStudentDetailsController = {
     renderAddStudentDetails: (req, res) => {
         const userId = req.session.user.id;
 
@@ -85,4 +85,4 @@ const studentController = {
     }
 };
 
-module.exports = studentController;
+module.exports = addStudentDetailsController;
