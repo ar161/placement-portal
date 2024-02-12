@@ -70,8 +70,43 @@ const studentModel = {
     }
 
     return { successes, errors };
+  },
+
+  getStudentIsMaster: (userId, callback) => {
+    const query = 'SELECT is_master FROM students WHERE user_id = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        if (results.length === 0) {
+            callback(null, false); // Assuming false if user not found or is_master not set
+            return;
+        }
+        callback(null, results[0].is_master === 1); // Assuming is_master is stored as 0 or 1
+    });
+  },
+
+  getStudentDetails: (userId, callback) => {
+    const query = 'SELECT name, username, email, batch, program, stream, cgpa, backlogs, tenth_percent, twelth_percent, is_master FROM students WHERE user_id = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        if (results.length === 0) {
+            callback(null, null); // Assuming null if user not found
+            return;
+        }
+        callback(null, results[0]); // Assuming only one student record per user
+    });
+  },
+
+  updateStudentDetails: (userId, details, callback) => {
+    const query = 'UPDATE students SET batch=?, program=?, stream=?, cgpa=?, backlogs=?, tenth_percent=?, twelth_percent=?, is_master=? WHERE user_id=?';
+    const values = [details.batch, details.program, details.stream, details.cgpa, details.backlogs, details.tenth_percent, details.twelth_percent, details.is_master ? 1 : 0, userId];
+    db.query(query, values, callback);
   }
-  
 };
 
 module.exports = studentModel;

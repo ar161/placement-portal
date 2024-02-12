@@ -1,7 +1,6 @@
-// adminController.js
+// controllers/adminController.js
 const tpoModel = require('../models/tpoModel');
 
-// controllers/adminController.js
 exports.renderAddPlacementOfficer = (req, res) => {
     res.render('admin/add_placement_officer', { error: null, success: null });
   };

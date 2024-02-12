@@ -20,7 +20,7 @@ exports.postLogin = (req, res) => {
       const user = results[0];
 
       // Set user object in the session with role
-      req.session.user = { id: user.id, username: user.username, role: user.role };
+      req.session.user = { id: user.user_id, username: user.username, role: user.role };
 
       // Redirect to the dashboard landing page
       res.redirect('/dashboard');

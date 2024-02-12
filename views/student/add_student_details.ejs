@@ -1,0 +1,58 @@
+<!-- views/student/add_student_details.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details Form</title>
+</head>
+<body>
+    <h1>Enter Student Details</h1>
+    <% if (error) { %>
+        <div style="color: red;"><%= error %></div>
+    <% } else if (success) { %>
+        <div style="color: green;"><%= success %></div>
+    <% } %>
+    <form action="/student/add_student_details" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= student ? student.name : '' %>" disabled><br>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="<%= student ? student.username : '' %>" disabled><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="<%= student ? student.email : '' %>" disabled><br>
+        <label for="batch">Batch:</label>
+        <input type="text" id="batch" name="batch" value="<%= isMaster && student ? student.batch : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="program">Program:</label>
+        <input type="text" id="program" name="program" value="<%= isMaster && student ? student.program : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="stream">Stream:</label>
+        <input type="text" id="stream" name="stream" value="<%= isMaster && student ? student.stream : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="cgpa">CGPA:</label>
+        <input type="number" step="0.01" id="cgpa" name="cgpa" value="<%= isMaster && student ? student.cgpa : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="backlogs">Backlogs:</label>
+        <input type="number" id="backlogs" name="backlogs" value="<%= isMaster && student ? student.backlogs : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="tenth_percent">Tenth Percent:</label>
+        <input type="number" step="0.01" id="tenth_percent" name="tenth_percent" value="<%= isMaster && student ? student.tenth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <label for="twelfth_percent">Twelfth Percent:</label>
+        <input type="number" step="0.01" id="twelth_percent" name="twelth_percent" value="<%= isMaster && student ? student.twelth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <% if (!isMaster) { %>
+          <!-- Render the button if the user is not a master -->
+          <button type="submit" id="submitButton">Submit</button>
+        <% } else { %>
+          <!-- Render a disabled button if the user is a master -->
+          <button type="button"id="disabledButton">Submit</button>
+        <% } %>
+  </form>
+  <div id="message" style="display: none; color: red;">Data already submitted. Please contact TPO.</div>
+
+  <script>
+
+      // Add click event listener to display the message
+      document.getElementById('disabledButton').addEventListener('click', function() {
+          if (<%= isMaster %>) {
+              document.getElementById('message').style.display = 'block';
+          }
+      });
+  </script>
+
+</body>
+</html>

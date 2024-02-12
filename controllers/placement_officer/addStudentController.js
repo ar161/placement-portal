@@ -1,4 +1,4 @@
-// placementOfficerController.js
+// addStudentController.js
 const db = require('../../config/db'); 
 const xlsx = require('xlsx');
 const fs = require('fs');
