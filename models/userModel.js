@@ -44,6 +44,21 @@ const userModel = {
       }
     });
     return duplicateUsernames;
+  },
+
+  getUserIDByUsername: (username, callback) => {
+    const query = 'SELECT user_id FROM users WHERE username = ?';
+    db.query(query, [username], (err, results) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        if (results.length === 0) {
+            callback(null, null); // User not found
+            return;
+        }
+        callback(null, results[0].user_id); // Return user_id
+    });
   }
 };
 

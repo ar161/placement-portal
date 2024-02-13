@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student Details</title>
+</head>
+
+<body>
+    <h1>Edit Student Details</h1>
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message"style="color: green;"></div>
+
+    <form id="fetch-form">
+        <label for="username">Enter Student Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Fetch</button>
+    </form>
+
+    <form id="edit-form" style="display: none;">
+        <!-- This form will be dynamically filled based on fetched data -->
+    </form>
+
+    <script>
+        document.getElementById('fetch-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+
+            fetch('/placement_officer/edit_student_details/fetch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('error-message').textContent = data.error;
+                    } else {
+                        document.getElementById('error-message').textContent = '';
+                        renderEditForm(data.student);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching student details:', error);
+                    document.getElementById('error-message').textContent = 'Error fetching student details';
+                });
+        });
+
+        function renderEditForm(student) {
+            const form = document.getElementById('edit-form');
+            form.innerHTML = `
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="${student.name}" disabled><br>
+                <!-- Hidden field for username -->
+                <input type="hidden" id="username" name="username" value="${student.username}">
+                <!-- End of hidden field -->
+                <label for="username">Username:</label>
+                <input type="text" id="usernameDisabled" name="usernameDisabled" value="${student.username}" disabled><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="${student.email}" disabled><br>
+                <label for="batch">Batch:</label>
+                <input type="text" id="batch" name="batch" value="${student.batch || ''}" required><br>
+                <label for="program">Program:</label>
+                <input type="text" id="program" name="program" value="${student.program || ''}" required><br>
+                <label for="stream">Stream:</label>
+                <input type="text" id="stream" name="stream" value="${student.stream || ''}" required><br>
+                <label for="cgpa">CGPA:</label>
+                <input type="number" step="0.01" id="cgpa" name="cgpa" value="${student.cgpa}" required><br>
+                <label for="backlogs">Backlogs:</label>
+                <input type="number" id="backlogs" name="backlogs" value="${student.backlogs}" required><br>
+                <label for="tenth_percent">Tenth Percent:</label>
+                <input type="number" step="0.01" id="tenth_percent" name="tenth_percent" value="${student.tenth_percent}" required><br>
+                <label for="twelfth_percent">Twelfth Percent:</label>
+                <input type="number" step="0.01" id="twelth_percent" name="twelth_percent" value="${student.twelth_percent}" required><br>
+                <button type="submit">Submit</button>
+            `;
+            form.style.display = 'block';
+
+            // Add event listener to handle form submission
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+                updateStudentDetails(); // Call function to handle form submission
+            });
+        }
+
+        function updateStudentDetails() {
+            const form = document.getElementById('edit-form');
+            const formData = {
+                username: form.querySelector('#username').value,
+                batch: form.querySelector('#batch').value,
+                program: form.querySelector('#program').value,
+                stream: form.querySelector('#stream').value,
+                cgpa: form.querySelector('#cgpa').value,
+                backlogs: form.querySelector('#backlogs').value,
+                tenth_percent: form.querySelector('#tenth_percent').value,
+                twelth_percent: form.querySelector('#twelth_percent').value
+            };
+
+            fetch('/placement_officer/edit_student_details/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('error-message').textContent = data.error;
+                    } else {
+                        document.getElementById('success-message').textContent = data.success;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating student details:', error);
+                    document.getElementById('error-message').textContent = 'Error updating student details';
+                });
+        }
+    </script>
+</body>
+
+</html>

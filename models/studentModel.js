@@ -106,6 +106,22 @@ const studentModel = {
     const query = 'UPDATE students SET batch=?, program=?, stream=?, cgpa=?, backlogs=?, tenth_percent=?, twelth_percent=?, is_master=? WHERE user_id=?';
     const values = [details.batch, details.program, details.stream, details.cgpa, details.backlogs, details.tenth_percent, details.twelth_percent, details.is_master ? 1 : 0, userId];
     db.query(query, values, callback);
+  },
+
+  isStudentUsername: (username, callback) => {
+    const query = 'SELECT user_id FROM users WHERE username = ? AND role = "student"';
+    db.query(query, [username], (err, results) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        if (results.length === 0) {
+            callback(null, false); // Username not found or not associated with a student
+            return;
+        }
+        const userId = results[0].user_id;
+        callback(null, userId);
+    });
   }
 };
 
