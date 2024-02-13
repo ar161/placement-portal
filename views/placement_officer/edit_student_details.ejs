@@ -109,13 +109,16 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
+                        document.getElementById('success-message').textContent = '';
                         document.getElementById('error-message').textContent = data.error;
                     } else {
+                        document.getElementById('error-message').textContent = '';
                         document.getElementById('success-message').textContent = data.success;
                     }
                 })
                 .catch(error => {
                     console.error('Error updating student details:', error);
+                    document.getElementById('success-message').textContent = '';
                     document.getElementById('error-message').textContent = 'Error updating student details';
                 });
         }
