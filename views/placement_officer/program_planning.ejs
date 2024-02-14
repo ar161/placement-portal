@@ -1,0 +1,164 @@
+<!-- program_planning.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Planning</title>
+</head>
+<body>
+    <h1>Programs</h1>
+
+    <!-- Error and success messages -->
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+
+    <!-- Form for adding a new program -->
+    <form id="addProgramForm">
+        <input type="text" id="programName" placeholder="Enter Program Name" required>
+        <button type="submit">Add Program</button>
+    </form>
+
+    <!-- Table to display existing programs -->
+    <table>
+        <thead>
+            <tr>
+                <th>Program Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="programList">
+            <!-- Program rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to clear error and success messages
+        function clearMessages() {
+            document.getElementById('error-message').textContent = '';
+            document.getElementById('success-message').textContent = '';
+        }
+
+        // Function to add event listeners for editing and deleting programs
+        function addEventListeners() {
+            document.querySelectorAll('.editProgramForm').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const programId = this.dataset.id;
+                    const programName = this.querySelector('.editProgramName').value;
+                    fetch('/placement_officer/program_planning/edit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ programId, programName })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        clearMessages();
+                        if (data.success) {
+                            document.getElementById('success-message').textContent = data.success;
+                            // Update program name in the table
+                            const programRow = document.getElementById(programId);
+                            programRow.querySelector('td').textContent = programName;
+                        } else {
+                            document.getElementById('error-message').textContent = data.error;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+            document.querySelectorAll('.deleteProgramForm').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const programId = this.dataset.id;
+                    fetch('/placement_officer/program_planning/delete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ programId })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            clearMessages();
+                            // Remove program row from the table
+                            const programRow = document.getElementById(programId);
+                            programRow.remove();
+                        } else {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data && data.error) {
+                            document.getElementById('error-message').textContent = data.error;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        }
+
+        // Function to fetch all programs and update the table
+        function fetchPrograms() {
+            fetch('/placement_officer/program_planning/all')
+            .then(response => response.json())
+            .then(programs => {
+                // Clear existing table rows
+                document.getElementById('programList').innerHTML = '';
+                // Add new table rows for each program
+                programs.forEach(program => {
+                    const newRow = `<tr id="${program.program_id}">
+                                        <td>${program.program_name}</td>
+                                        <td>
+                                            <form class="editProgramForm" data-id="${program.program_id}">
+                                                <input type="text" class="editProgramName" placeholder="Enter new name" required>
+                                                <button type="submit">Edit</button>
+                                            </form>
+                                            <form class="deleteProgramForm" data-id="${program.program_id}">
+                                                <button type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>`;
+                    document.getElementById('programList').insertAdjacentHTML('beforeend', newRow);
+                });
+                // Add event listeners for editing and deleting programs
+                addEventListeners();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Event listener for submitting the add program form
+        document.getElementById('addProgramForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            clearMessages();
+            const programName = document.getElementById('programName').value;
+            fetch('/placement_officer/program_planning/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ programName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('success-message').textContent = data.success;
+                    // Clear input field
+                    document.getElementById('programName').value = '';
+                    // Fetch and update programs
+                    fetchPrograms();
+                } else {
+                    document.getElementById('error-message').textContent = data.error;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Initial fetch for programs
+        fetchPrograms();
+    </script>
+</body>
+</html>
