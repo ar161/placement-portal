@@ -4,6 +4,7 @@ const router = express.Router();
 const addStudentController = require('../controllers/placement_officer/addStudentController');
 const editStudentDetailsController = require('../controllers/placement_officer/editStudentDetailsController');
 const programPlanningController = require('../controllers/placement_officer/programPlanningController');
+const streamPlanningController = require('../controllers/placement_officer/streamPlanningController');
 const isAuthenticated = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -30,5 +31,14 @@ router.get('/program_planning/all', isAuthenticated, roleMiddleware.checkOfficer
 router.post('/program_planning/add', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.addProgram);
 router.post('/program_planning/edit', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.editProgram);
 router.post('/program_planning/delete', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.deleteProgram);
+
+// Route to render the stream management page
+router.get('/stream_planning', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.renderStreamPlanning);
+
+// Routes for handling streams
+router.get('/stream_planning/all', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.getAllStreams);
+router.post('/stream_planning/add', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.addStream);
+router.post('/stream_planning/edit', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.editStream);
+router.post('/stream_planning/delete', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.deleteStream);
 
 module.exports = router;

@@ -1,0 +1,210 @@
+<!-- stream_planning.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Planning</title>
+</head>
+
+<body>
+    <h1>Streams</h1>
+
+    <!-- Error and success messages -->
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+
+    <!-- Form for adding a new stream -->
+    <form id="addStreamForm">
+        <input type="text" id="streamName" placeholder="Enter Stream Name" required>
+        <!-- Select dropdown for selecting program -->
+        <select id="programId" required>
+            <option value="">Select Program</option>
+            <!-- Options will be dynamically added here -->
+        </select>
+        <button type="submit">Add Stream</button>
+    </form>
+
+    <!-- Table to display existing streams -->
+    <table>
+        <thead>
+            <tr>
+                <th>Stream</th>
+                <th>Program</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="streamList">
+            <!-- Stream rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to clear error and success messages
+        function clearMessages() {
+            document.getElementById('error-message').textContent = '';
+            document.getElementById('success-message').textContent = '';
+        }
+
+        // Function to add event listeners for editing and deleting streams
+        function addEventListeners() {
+            // Add event listener for editing a stream
+            document.querySelectorAll('.editStreamForm').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const streamId = this.dataset.id;
+                    const streamName = this.querySelector('.editStreamName').value;
+                    fetch('/placement_officer/stream_planning/edit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ streamId, streamName })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            clearMessages();
+                            if (data.success) {
+                                document.getElementById('success-message').textContent = data.success;
+                                // Update stream name in the table
+                                const streamRow = document.getElementById(streamId);
+                                streamRow.querySelector('.stream-name').textContent = streamName;
+                            } else {
+                                document.getElementById('error-message').textContent = data.error;
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+
+            // Add event listener for deleting a stream
+            document.querySelectorAll('.deleteStreamForm').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const streamId = this.dataset.id;
+                    fetch('/placement_officer/stream_planning/delete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ streamId })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to delete stream');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Remove stream row from the table
+                                const streamRow = document.getElementById(streamId);
+                                streamRow.remove();
+                                // Check if there are no streams left
+                                if (document.querySelectorAll('.deleteStreamForm').length === 0) {
+                                    document.getElementById('streamList').innerHTML = '<tr><td colspan="3">No streams available</td></tr>';
+                                }
+                            } else {
+                                // Handle error response
+                                console.error(data.error);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        }
+
+        function fetchStreams() {
+            fetch('/placement_officer/stream_planning/all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch streams');
+                    }
+                    return response.json();
+                })
+                .then(streams => {
+                    // Clear existing table rows
+                    document.getElementById('streamList').innerHTML = '';
+                    if (streams.length === 0) {
+                        document.getElementById('streamList').innerHTML = '<tr><td colspan="3">No streams available</td></tr>';
+                        return;
+                    }
+                    // Add new table rows for each stream
+                    streams.forEach(stream => {
+                        const newRow = `<tr id="${stream.stream_id}">
+                                <td class="stream-name">${stream.stream_name}</td>
+                                <td>${stream.program_name}</td>
+                                <td>
+                                    <!-- Form for editing a stream -->
+                                    <form class="editStreamForm" data-id="${stream.stream_id}">
+                                        <input type="text" class="editStreamName" placeholder="Enter new name" required>
+                                        <button type="submit">Edit</button>
+                                    </form>
+                                    <!-- Form for deleting a stream -->
+                                    <form class="deleteStreamForm" data-id="${stream.stream_id}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>`;
+                        document.getElementById('streamList').insertAdjacentHTML('beforeend', newRow);
+                    });
+                    // Add event listeners for editing and deleting streams
+                    addEventListeners();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to fetch all programs and populate the select dropdown
+        function fetchPrograms() {
+            fetch('/placement_officer/program_planning/all')
+                .then(response => response.json())
+                .then(programs => {
+                    const programDropdown = document.getElementById('programId');
+                    programs.forEach(program => {
+                        const option = document.createElement('option');
+                        option.value = program.program_id;
+                        option.textContent = program.program_name;
+                        programDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Event listener for submitting the add stream form
+        document.getElementById('addStreamForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            clearMessages();
+            const streamName = document.getElementById('streamName').value;
+            const programId = document.getElementById('programId').value;
+            fetch('/placement_officer/stream_planning/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ streamName, programId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('success-message').textContent = data.success;
+                        // Clear input fields
+                        document.getElementById('streamName').value = '';
+                        document.getElementById('programId').value = '';
+                        // Fetch and update streams
+                        fetchStreams();
+                    } else {
+                        document.getElementById('error-message').textContent = data.error;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Initial fetch for streams and programs
+        fetchStreams();
+        fetchPrograms();
+    </script>
+</body>
+
+</html>
