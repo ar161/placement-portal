@@ -88,7 +88,7 @@ const studentModel = {
   },
 
   getStudentDetails: (userId, callback) => {
-    const query = 'SELECT name, username, email, batch, program, stream, cgpa, backlogs, tenth_percent, twelth_percent, is_master FROM students WHERE user_id = ?';
+    const query = 'SELECT name, username, email, batch, program_id, stream_id, cgpa, backlogs, tenth_percent, twelth_percent, is_master FROM students WHERE user_id = ?';
     db.query(query, [userId], (err, results) => {
         if (err) {
             callback(err, null);
@@ -103,8 +103,8 @@ const studentModel = {
   },
 
   updateStudentDetails: (userId, details, callback) => {
-    const query = 'UPDATE students SET batch=?, program=?, stream=?, cgpa=?, backlogs=?, tenth_percent=?, twelth_percent=?, is_master=? WHERE user_id=?';
-    const values = [details.batch, details.program, details.stream, details.cgpa, details.backlogs, details.tenth_percent, details.twelth_percent, details.is_master ? 1 : 0, userId];
+    const query = 'UPDATE students SET batch=?, program_id=?, stream_id=?, cgpa=?, backlogs=?, tenth_percent=?, twelth_percent=?, is_master=? WHERE user_id=?';
+    const values = [details.batch, details.program_id, details.stream_id, details.cgpa, details.backlogs, details.tenth_percent, details.twelth_percent, details.is_master ? 1 : 0, userId];
     db.query(query, values, callback);
   },
 

@@ -57,3 +57,18 @@ exports.deleteStream = (req, res) => {
         res.json({ success: 'Stream deleted successfully' });
     });
 };
+
+exports.getProgramStreams = (req, res) => {
+    const { programId } = req.params;
+
+    // Implement logic to fetch streams for the specified programId
+    streamModel.getProgramStreams(programId, (err, streams) => {
+        if (err) {
+            console.error('Error fetching program streams:', err);
+            return res.status(500).json({ error: 'Error fetching program streams' });
+        }
+
+        // Return the streams for the specified programId
+        res.json(streams);
+    });
+};

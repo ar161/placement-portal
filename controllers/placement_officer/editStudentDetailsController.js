@@ -1,5 +1,6 @@
 const studentModel = require('../../models/studentModel');
 const userModel = require('../../models/userModel');
+const streamModel = require('../../models/streamModel');
 
 const editStudentDetailsController = {
     renderEditStudentDetails: (req, res) => {
@@ -55,7 +56,7 @@ const editStudentDetailsController = {
             if (!userId) {
                 return res.status(404).json({ error: 'User not found or not a student' });
             }
-
+    
             // Continue with checking if the authenticated user is allowed to update student details
             studentModel.getStudentIsMaster(userId, (err, isMaster) => {
                 if (err) {
@@ -66,24 +67,38 @@ const editStudentDetailsController = {
                 if (!isMaster) {
                     return res.status(403).json({ error: 'Edit Disabled due to Incomplete Data' });
                 }
-
-                // Update student record in the database
-                studentModel.updateStudentDetails(userId, {
-                    batch: batch,
-                    program: program,
-                    stream: stream,
-                    cgpa: cgpa,
-                    backlogs: backlogs,
-                    tenth_percent: tenth_percent,
-                    twelth_percent: twelth_percent,
-                    is_master: 1 // Keep is_master to true after updating all details
-                }, (err) => {
+    
+                // Fetch program streams to validate the selected stream
+                streamModel.getProgramStreams(program, (err, programStreams) => {
                     if (err) {
-                        console.error('Error updating student details:', err);
-                        return res.status(500).json({ error: 'Error updating details. Please try again.' });
-                    } else {
-                        return res.status(200).json({ success: 'Student details updated successfully!' });
+                        console.error('Error fetching program streams:', err);
+                        return res.status(500).json({ error: 'Error fetching program streams' });
                     }
+    
+                    // Check if the selected stream belongs to the selected program
+                    const validStream = programStreams.some(programStream => programStream.stream_id === parseInt(stream));
+                    if (!validStream) {
+                        return res.status(400).json({ error: 'Selected stream does not belong to the selected program' });
+                    }
+    
+                    // Update student record in the database
+                    studentModel.updateStudentDetails(userId, {
+                        batch: batch,
+                        program_id: program,
+                        stream_id: stream,
+                        cgpa: cgpa,
+                        backlogs: backlogs,
+                        tenth_percent: tenth_percent,
+                        twelth_percent: twelth_percent,
+                        is_master: 1 // Keep is_master to true after updating all details
+                    }, (err) => {
+                        if (err) {
+                            console.error('Error updating student details:', err);
+                            return res.status(500).json({ error: 'Error updating details. Please try again.' });
+                        } else {
+                            return res.status(200).json({ success: 'Student details updated successfully!' });
+                        }
+                    });
                 });
             });
         });

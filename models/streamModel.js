@@ -50,6 +50,16 @@ const streamModel = {
             }
             callback(null);
         });
+    },
+    
+    getProgramStreams: (programId, callback) => {
+        const query = 'SELECT stream_id, stream_name FROM streams WHERE program_id = ?';
+        db.query(query, [programId], (err, streams) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, streams);
+        });
     }
 };
 

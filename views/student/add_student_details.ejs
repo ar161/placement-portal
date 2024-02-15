@@ -23,9 +23,12 @@
         <label for="batch">Batch:</label>
         <input type="text" id="batch" name="batch" value="<%= isMaster && student ? student.batch : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
         <label for="program">Program:</label>
-        <input type="text" id="program" name="program" value="<%= isMaster && student ? student.program : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <select id="program" name="program" <% if (isMaster) { %>disabled<% } %> required>
+            <option value="">Select Program</option>        </select><br>
         <label for="stream">Stream:</label>
-        <input type="text" id="stream" name="stream" value="<%= isMaster && student ? student.stream : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+        <select id="stream" name="stream" <% if (isMaster) { %>disabled<% } %> required>
+            <option value="">Select Stream</option>
+        </select><br>
         <label for="cgpa">CGPA:</label>
         <input type="number" step="0.01" id="cgpa" name="cgpa" value="<%= isMaster && student ? student.cgpa : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
         <label for="backlogs">Backlogs:</label>
@@ -41,18 +44,86 @@
           <!-- Render a disabled button if the user is a master -->
           <button type="button"id="disabledButton">Submit</button>
         <% } %>
-  </form>
-  <div id="message" style="display: none; color: red;">Data already submitted. Please contact TPO.</div>
+    </form>
+    <div id="message" style="display: none; color: red;">Data already submitted. Please contact TPO.</div>
 
-  <script>
+    <script>
+        // Add event listener to the disabled button if it exists
+        const disabledButton = document.getElementById('disabledButton');
+        if (disabledButton) {
+            disabledButton.addEventListener('click', function() {
+                if (<%= isMaster %>) {
+                    document.getElementById('message').style.display = 'block';
+                }
+            });
+        }
 
-      // Add click event listener to display the message
-      document.getElementById('disabledButton').addEventListener('click', function() {
-          if (<%= isMaster %>) {
-              document.getElementById('message').style.display = 'block';
-          }
-      });
-  </script>
+        // Function to fetch programs and populate the dropdown
+        function fetchProgramsAndPopulateDropdown() {
+            fetch('/placement_officer/program_planning/all')
+            .then(response => response.json())
+            .then(programs => {
+                const programDropdown = document.getElementById('program');
+                programDropdown.innerHTML = '<option value="">Select Program</option>';
+                programs.forEach(program => {
+                    const option = document.createElement('option');
+                    option.value = program.program_id;
+                    option.textContent = program.program_name;
+                    programDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching programs:', error));
+        }
 
+        /// Define a global object to cache the fetched streams data
+        const cachedStreams = {};
+
+        // Function to fetch streams for the selected program and populate the dropdown
+        function fetchStreamsAndPopulateDropdown(programId) {
+            // Check if streams for the given programId are already cached
+            if (cachedStreams[programId]) {
+                // If cached, directly populate the streams dropdown
+                populateStreamsDropdown(cachedStreams[programId]);
+            } else {
+                // If not cached, fetch the streams data from the server
+                fetch(`/placement_officer/stream_planning/${programId}`)
+                .then(response => response.json())
+                .then(streams => {
+                    // Cache the fetched streams data
+                    cachedStreams[programId] = streams;
+                    // Populate the streams dropdown
+                    populateStreamsDropdown(streams);
+                })
+                .catch(error => console.error('Error fetching streams:', error));
+            }
+        }
+
+        // Function to populate the streams dropdown
+        function populateStreamsDropdown(streams) {
+            const streamDropdown = document.getElementById('stream');
+            streamDropdown.innerHTML = '<option value="">Select Stream</option>';
+            streams.forEach(stream => {
+                const option = document.createElement('option');
+                option.value = stream.stream_id;
+                option.textContent = stream.stream_name;
+                streamDropdown.appendChild(option);
+            });
+        }
+
+        // Add event listener for program dropdown change
+        document.getElementById('program').addEventListener('change', function() {
+            const selectedProgramId = this.value;
+            if (selectedProgramId) {
+                fetchStreamsAndPopulateDropdown(selectedProgramId);
+            } else {
+                // Clear stream dropdown if no program is selected
+                const streamDropdown = document.getElementById('stream');
+                streamDropdown.innerHTML = '<option value="">Select Stream</option>';
+            }
+        });
+
+        // Fetch programs when the page loads
+        fetchProgramsAndPopulateDropdown();
+    </script>
 </body>
 </html>

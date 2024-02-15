@@ -10,7 +10,7 @@
 <body>
     <h1>Edit Student Details</h1>
     <div id="error-message" style="color: red;"></div>
-    <div id="success-message"style="color: green;"></div>
+    <div id="success-message" style="color: green;"></div>
 
     <form id="fetch-form">
         <label for="username">Enter Student Username:</label>
@@ -37,14 +37,17 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
+                        document.getElementById('success-message').textContent = '';
                         document.getElementById('error-message').textContent = data.error;
                     } else {
                         document.getElementById('error-message').textContent = '';
+                        document.getElementById('success-message').textContent = data.success;
                         renderEditForm(data.student);
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching student details:', error);
+                    //console.error('Error fetching student details:', error);
+                    document.getElementById('success-message').textContent = '';
                     document.getElementById('error-message').textContent = 'Error fetching student details';
                 });
         });
@@ -64,25 +67,122 @@
                 <label for="batch">Batch:</label>
                 <input type="text" id="batch" name="batch" value="${student.batch || ''}" required><br>
                 <label for="program">Program:</label>
-                <input type="text" id="program" name="program" value="${student.program || ''}" required><br>
+                <select id="program" name="program" required>
+                    <!-- Program options will be dynamically populated here -->
+                </select><br>
                 <label for="stream">Stream:</label>
-                <input type="text" id="stream" name="stream" value="${student.stream || ''}" required><br>
+                <select id="stream" name="stream" required>
+                    <!-- Stream options will be dynamically populated here -->
+                </select><br>
                 <label for="cgpa">CGPA:</label>
                 <input type="number" step="0.01" id="cgpa" name="cgpa" value="${student.cgpa}" required><br>
                 <label for="backlogs">Backlogs:</label>
                 <input type="number" id="backlogs" name="backlogs" value="${student.backlogs}" required><br>
                 <label for="tenth_percent">Tenth Percent:</label>
                 <input type="number" step="0.01" id="tenth_percent" name="tenth_percent" value="${student.tenth_percent}" required><br>
-                <label for="twelfth_percent">Twelfth Percent:</label>
+                <label for="twelfth_percent">Twelth Percent:</label>
                 <input type="number" step="0.01" id="twelth_percent" name="twelth_percent" value="${student.twelth_percent}" required><br>
                 <button type="submit">Submit</button>
             `;
             form.style.display = 'block';
 
-            // Add event listener to handle form submission
-            form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission
-                updateStudentDetails(); // Call function to handle form submission
+            // Fetch programs and streams options
+            fetchPrograms(student.program_id, student.stream_id);
+            setupEventListeners();
+        }
+
+        function fetchPrograms(selectedProgramId, selectedStreamId) {
+            fetch('/placement_officer/program_planning/all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch programs');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const programSelect = document.getElementById('program');
+                    programSelect.innerHTML = '<option value="">Select Program</option>';
+                    if (data.length === 0) {
+                        const option = document.createElement('option');
+                        option.textContent = 'No programs available';
+                        option.disabled = true;
+                        programSelect.appendChild(option);
+                    } else {
+                        data.forEach(program => {
+                            const option = document.createElement('option');
+                            option.value = program.program_id;
+                            option.textContent = program.program_name;
+                            if (program.program_id === selectedProgramId) {
+                                option.selected = true; // Set the selected attribute
+                            }
+                            programSelect.appendChild(option);
+                        });
+
+                        // Fetch streams options for the selected program
+                        fetchStreams(selectedProgramId, selectedStreamId);
+                    }
+                })
+                .catch(error => console.error('Error fetching programs:', error));
+        }
+
+        // Define a global object to cache the fetched streams data
+        const cachedStreams = {};
+
+        function fetchStreams(programId, selectedStreamId) {
+            // Check if streams for the given programId are already cached
+            if (cachedStreams[programId]) {
+                // If cached, directly populate the streams dropdown
+                populateStreamsDropdown(cachedStreams[programId], selectedStreamId);
+            } else {
+                // If not cached, fetch the streams data from the server
+                fetch(`/placement_officer/stream_planning/${programId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch streams');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Cache the fetched streams data
+                        cachedStreams[programId] = data;
+                        // Populate the streams dropdown
+                        populateStreamsDropdown(data, selectedStreamId);
+                    })
+                    .catch(error => console.error('Error fetching streams:', error));
+            }
+        }
+
+        function populateStreamsDropdown(streamsData, selectedStreamId) {
+            const streamSelect = document.getElementById('stream');
+            streamSelect.innerHTML = '<option value="">Select Stream</option>';
+            if (streamsData.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'No streams available';
+                option.disabled = true;
+                streamSelect.appendChild(option);
+            } else {
+                streamsData.forEach(stream => {
+                    const option = document.createElement('option');
+                    option.value = stream.stream_id;
+                    option.textContent = stream.stream_name;
+                    if (selectedStreamId && stream.stream_id === selectedStreamId) {
+                        option.selected = true; // Set the selected attribute
+                    }
+                    streamSelect.appendChild(option);
+                });
+            }
+        }
+
+        document.getElementById('edit-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+            updateStudentDetails(); // Call function to handle form submission
+        });
+
+        function setupEventListeners() {
+            // Add event listener to handle program change and fetch associated streams
+            document.getElementById('program').addEventListener('change', function () {
+                const programId = this.value;
+                fetchStreams(programId, null);
             });
         }
 
@@ -117,7 +217,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error updating student details:', error);
+                    //console.error('Error updating student details:', error);
                     document.getElementById('success-message').textContent = '';
                     document.getElementById('error-message').textContent = 'Error updating student details';
                 });

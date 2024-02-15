@@ -23,14 +23,16 @@ router.post('/edit_student_details/fetch', isAuthenticated, roleMiddleware.check
 // Update student details
 router.post('/edit_student_details/update', isAuthenticated, roleMiddleware.checkOfficer, editStudentDetailsController.updateStudentDetails);
 
+
 // Route to render the project planning page
 router.get('/program_planning', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.renderProgramPlanning);
 
 // Routes for handling programs
-router.get('/program_planning/all', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.getAllPrograms);
+router.get('/program_planning/all', isAuthenticated, roleMiddleware.checkOfficerOrStudent, programPlanningController.getAllPrograms);
 router.post('/program_planning/add', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.addProgram);
 router.post('/program_planning/edit', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.editProgram);
 router.post('/program_planning/delete', isAuthenticated, roleMiddleware.checkOfficer, programPlanningController.deleteProgram);
+
 
 // Route to render the stream management page
 router.get('/stream_planning', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.renderStreamPlanning);
@@ -40,5 +42,6 @@ router.get('/stream_planning/all', isAuthenticated, roleMiddleware.checkOfficer,
 router.post('/stream_planning/add', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.addStream);
 router.post('/stream_planning/edit', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.editStream);
 router.post('/stream_planning/delete', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.deleteStream);
+router.get('/stream_planning/:programId', isAuthenticated, roleMiddleware.checkOfficerOrStudent, streamPlanningController.getProgramStreams);
 
 module.exports = router;
