@@ -1,14 +1,14 @@
 // roleMiddleware.js
 
-// Author: Raghav Agarwal
-// Date: 18/01/2024
+// Author: 
+// Date: 
 // Description: Check Role to implement Role Based Access
 
 const checkRole = (allowedRole) => {
     return (req, res, next) => {
       const { role } = req.session.user;
   
-      if (role === allowedRole) {
+      if (allowedRole.includes(role)) {
         return next();
       } else {
         req.session.destroy((err) => {
@@ -25,5 +25,6 @@ const checkRole = (allowedRole) => {
     checkAdmin: checkRole('admin'),
     checkStudent: checkRole('student'),
     checkOfficer: checkRole('officer'),
+    checkOfficerOrStudent: checkRole(['officer', 'student']),
   };
   
