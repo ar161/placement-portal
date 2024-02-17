@@ -5,6 +5,7 @@ const addStudentController = require('../controllers/placement_officer/addStuden
 const editStudentDetailsController = require('../controllers/placement_officer/editStudentDetailsController');
 const programPlanningController = require('../controllers/placement_officer/programPlanningController');
 const streamPlanningController = require('../controllers/placement_officer/streamPlanningController');
+const createDriveController = require('../controllers/placement_officer/createDriveController');
 const isAuthenticated = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -43,5 +44,11 @@ router.post('/stream_planning/add', isAuthenticated, roleMiddleware.checkOfficer
 router.post('/stream_planning/edit', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.editStream);
 router.post('/stream_planning/delete', isAuthenticated, roleMiddleware.checkOfficer, streamPlanningController.deleteStream);
 router.get('/stream_planning/:programId', isAuthenticated, roleMiddleware.checkOfficerOrStudent, streamPlanningController.getProgramStreams);
+
+
+// Render Drive Creation Form route
+router.get('/create_drive', isAuthenticated, roleMiddleware.checkOfficer, createDriveController.renderCreateDrive);
+// Create Drive route
+router.post('/create_drive/add', isAuthenticated, roleMiddleware.checkOfficer, createDriveController.createDrive);
 
 module.exports = router;

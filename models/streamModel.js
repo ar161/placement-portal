@@ -60,6 +60,19 @@ const streamModel = {
             }
             callback(null, streams);
         });
+    },
+
+    getStreamById : (streamId, callback) => {
+        const query = 'SELECT * FROM streams WHERE stream_id = ?';
+        db.query(query, [streamId], (err, rows) => {
+            if (err) {
+                return callback(err, null);
+            }
+            if (rows.length === 0) {
+                return callback(null, null);
+            }
+            callback(null, rows[0]);
+        });
     }
 };
 

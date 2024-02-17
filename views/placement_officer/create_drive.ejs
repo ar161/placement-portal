@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Drive</title>
+</head>
+
+<body>
+    <h1>Create Drive</h1>
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+    <form id="driveForm">
+        <label for="company_name">Company Name:</label>
+        <input type="text" id="company_name" name="company_name" required><br>
+
+        <label for="batch">Batch:</label>
+        <input type="number" id="batch" name="batch" placeholder="Batch for which the drive is applicable" required><br>
+
+        <label for="programs">Select Programs:</label>
+        <select id="programs" name="programs[]" multiple required class>
+            <!-- Options will be populated dynamically -->
+        </select><br>
+
+        <label for="streams">Select Streams:</label>
+        <select id="streams" name="streams[]" multiple required class>
+            <!-- Options will be populated dynamically -->
+        </select><br>
+
+        <label for="eligibility_10th">Minimum Eligibility 10th:</label>
+        <input type="number" step="0.01" id="eligibility_10th" name="eligibility_10th" required><br>
+
+        <label for="eligibility_12th">Minimum Eligibility 12th:</label>
+        <input type="number" step="0.01" id="eligibility_12th" name="eligibility_12th" required><br>
+
+        <label for="eligibility_cgpa">Minimum Eligibility CGPA:</label>
+        <input type="number" step="0.01" id="eligibility_cgpa" name="eligibility_cgpa" required><br>
+
+        <label for="package_type">Package Type:</label>
+        <select id="package_type" name="package_type" required>
+            <option value="fix">Fix</option>
+            <option value="range">Range</option>
+        </select><br>
+
+        <div id="packageAmountContainer">
+            <!-- Additional input fields for package amount range will be dynamically added here if "Range" is selected -->
+        </div>
+
+        <label for="date_of_drive">Date of Drive:</label>
+        <input type="date" id="date_of_drive" name="date_of_drive" required><br>
+
+        <label for="application_deadline">Application Deadline:</label>
+        <input type="date" id="application_deadline" name="application_deadline" required><br>
+
+        <label for="bond">Bond (in years):</label>
+        <input type="number" id="bond" name="bond" placeholder="Number of years of bond (if any)"><br>
+
+        <label for="job_location">Job Location:</label>
+        <input type="text" id="job_location" name="job_location" placeholder="Job location" required><br>
+
+        <label for="job_role">Job Role:</label>
+        <input type="text" id="job_role" name="job_role" required><br>
+
+        <label for="job_description">Job Description:</label><br>
+        <textarea id="job_description" name="job_description" required></textarea><br>
+
+        <button type="submit">Create Drive</button>
+    </form>
+
+    <script>
+        // Cache for fetched streams data
+        const streamsCache = {};
+
+        // Function to fetch streams for selected programs
+        function fetchStreamsForSelectedPrograms(selectedProgramIds) {
+            // Clear the streams dropdown
+            const streamsSelect = document.getElementById('streams');
+            streamsSelect.innerHTML = '<option value="">Select Stream</option>';
+
+            // Fetch streams data from the server for each selected program
+            selectedProgramIds.forEach(programId => {
+                if (streamsCache[programId]) {
+                    populateStreamsDropdown(streamsCache[programId]);
+                } else {
+                    fetch(`/placement_officer/stream_planning/${programId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            streamsCache[programId] = data;
+                            populateStreamsDropdown(data);
+                        })
+                        .catch(error => console.error('Error fetching streams:', error));
+                }
+            });
+        }
+
+        // Function to populate streams dropdown
+        function populateStreamsDropdown(streams) {
+            const streamsSelect = document.getElementById('streams');
+            streams.forEach(stream => {
+                const option = document.createElement('option');
+                option.value = stream.stream_id;
+                option.textContent = stream.stream_name;
+                streamsSelect.appendChild(option);
+            });
+        }
+
+        // Fetch programs and populate programs dropdown
+        fetch('/placement_officer/program_planning/all')
+            .then(response => response.json())
+            .then(data => {
+                const programsSelect = document.getElementById('programs');
+                data.forEach(program => {
+                    const option = document.createElement('option');
+                    option.value = program.program_id;
+                    option.textContent = program.program_name;
+                    programsSelect.appendChild(option);
+                });
+
+                // Add change event listener to programs dropdown
+                programsSelect.addEventListener('change', function () {
+                    const selectedProgramIds = Array.from(this.selectedOptions).map(option => option.value);
+                    fetchStreamsForSelectedPrograms(selectedProgramIds);
+                });
+
+            })
+            .catch(error => console.error('Error fetching programs:', error));
+
+        // Add change event listener to package type dropdown
+        document.getElementById('package_type').addEventListener('change', function () {
+            const packageType = this.value;
+            const packageAmountContainer = document.getElementById('packageAmountContainer');
+            packageAmountContainer.innerHTML = ''; // Clear previous inputs
+
+            if (packageType === 'range') {
+                // Create input fields for package amount range
+                const minPackageInput = document.createElement('input');
+                minPackageInput.type = 'number';
+                minPackageInput.step = '0.01';
+                minPackageInput.id = 'min_package_amount';
+                minPackageInput.name = 'min_package_amount';
+                minPackageInput.placeholder = 'Minimum Package Amount';
+                minPackageInput.required = true;
+
+                const maxPackageInput = document.createElement('input');
+                maxPackageInput.type = 'number';
+                maxPackageInput.step = '0.01';
+                maxPackageInput.id = 'max_package_amount';
+                maxPackageInput.name = 'max_package_amount';
+                maxPackageInput.placeholder = 'Maximum Package Amount';
+                maxPackageInput.required = true;
+
+                // Append inputs to the container
+                packageAmountContainer.appendChild(minPackageInput);
+                packageAmountContainer.appendChild(document.createTextNode(' - '));
+                packageAmountContainer.appendChild(maxPackageInput);
+            } else if (packageType === 'fix') {
+                // Create input field for fixed package amount
+                const fixedPackageInput = document.createElement('input');
+                fixedPackageInput.type = 'number';
+                fixedPackageInput.step = '0.01';
+                fixedPackageInput.id = 'fixed_package_amount';
+                fixedPackageInput.name = 'fixed_package_amount';
+                fixedPackageInput.placeholder = 'Fixed Package Amount';
+                fixedPackageInput.required = true;
+
+                // Append input to the container
+                packageAmountContainer.appendChild(fixedPackageInput);
+            }
+        });
+
+        // Trigger change event manually to load package amount form when the page loads
+        const packageType = document.getElementById('package_type');
+        packageType.dispatchEvent(new Event('change'));
+
+        //Submit the form
+        document.getElementById('driveForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const company_name = document.getElementById('company_name').value;
+            const batch = document.getElementById('batch').value;
+            const eligibility_10th = document.getElementById('eligibility_10th').value;
+            const eligibility_12th = document.getElementById('eligibility_12th').value;
+            const eligibility_cgpa = document.getElementById('eligibility_cgpa').value;
+            const package_type = document.getElementById('package_type').value;
+
+            let package_amount;
+            if (package_type === 'fix') {
+                package_amount = document.getElementById('fixed_package_amount').value;
+            } else if (package_type === 'range') {
+                const min_package_amount = document.getElementById('min_package_amount').value;
+                const max_package_amount = document.getElementById('max_package_amount').value;
+                package_amount = `${min_package_amount}-${max_package_amount}`;
+            }
+
+            const date_of_drive = document.getElementById('date_of_drive').value;
+            const application_deadline = document.getElementById('application_deadline').value;
+            const job_location = document.getElementById('job_location').value;
+            const job_role = document.getElementById('job_role').value;
+            const job_description = document.getElementById('job_description').value;
+            const programs = Array.from(document.querySelectorAll('#programs option:checked')).map(option => option.value);
+            const streams = Array.from(document.querySelectorAll('#streams option:checked')).map(option => option.value);
+
+            const formData = {
+                company_name: company_name,
+                batch: batch,
+                eligibility_10th: eligibility_10th,
+                eligibility_12th: eligibility_12th,
+                eligibility_cgpa: eligibility_cgpa,
+                package_type: package_type,
+                package_amount: package_amount,
+                date_of_drive: date_of_drive,
+                application_deadline: application_deadline,
+                job_location: job_location,
+                job_role: job_role,
+                job_description: job_description,
+                program_ids: programs,
+                stream_ids: streams
+            };
+
+            // Send form data to the server
+            fetch('/placement_officer/create_drive/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('success-message').textContent = '';
+                        document.getElementById('error-message').textContent = data.error;
+                    } else {
+                        document.getElementById('error-message').textContent = '';
+                        document.getElementById('success-message').textContent = data.success;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('success-message').textContent = '';
+                    document.getElementById('error-message').textContent = 'Error creating drive';
+                });
+        });
+    </script>
+</body>
+
+</html>

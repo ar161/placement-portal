@@ -48,4 +48,17 @@ programModel.deleteProgram = (programId, callback) => {
     });
 };
 
+programModel.getProgramById = (programId, callback) => {
+    const query = 'SELECT * FROM programs WHERE program_id = ?';
+    db.query(query, [programId], (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        if (rows.length === 0) {
+            return callback(null, null);
+        }
+        callback(null, rows[0]);
+    });
+};
+
 module.exports = programModel;
