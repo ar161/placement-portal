@@ -17,4 +17,15 @@ driveModel.createDrive = async (driveData) => {
     }
 };
 
+// Model function to fetch drives based on status
+driveModel.getDrivesByStatus = async (isCompleted) => {
+    try {
+        const query = 'SELECT * FROM drives WHERE drive_result_declared = ?';
+        const [rows] = await db.promise().execute(query, [isCompleted]);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = driveModel;

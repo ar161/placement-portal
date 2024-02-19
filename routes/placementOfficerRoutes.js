@@ -6,6 +6,7 @@ const editStudentDetailsController = require('../controllers/placement_officer/e
 const programPlanningController = require('../controllers/placement_officer/programPlanningController');
 const streamPlanningController = require('../controllers/placement_officer/streamPlanningController');
 const createDriveController = require('../controllers/placement_officer/createDriveController');
+const manageDrivesController = require('../controllers/placement_officer/manageDrivesController');
 const isAuthenticated = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -50,5 +51,13 @@ router.get('/stream_planning/:programId', isAuthenticated, roleMiddleware.checkO
 router.get('/create_drive', isAuthenticated, roleMiddleware.checkOfficer, createDriveController.renderCreateDrive);
 // Create Drive route
 router.post('/create_drive/add', isAuthenticated, roleMiddleware.checkOfficer, createDriveController.createDrive);
+
+
+// Route to render Manage Drives page
+router.get('/manage_drives',isAuthenticated, roleMiddleware.checkOfficer, manageDrivesController.renderManageDrivesPage);
+// Route to fetch  Current drives
+router.get('/manage_drives/current',isAuthenticated, roleMiddleware.checkOfficer, manageDrivesController.getCurrentDrives);
+// Route to fetch  Completed drives
+router.get('/manage_drives/completed',isAuthenticated, roleMiddleware.checkOfficer, manageDrivesController.getCompletedDrives);
 
 module.exports = router;

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Drives</title>
+    <link rel="stylesheet" href="../../css/manage_drives.css">
+</head>
+
+<body>
+    <h1>Manage Drives</h1>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'currentDrives')">Current Drives</button>
+        <button class="tablinks" onclick="openTab(event, 'completedDrives')">Completed Drives</button>
+    </div>
+
+    <div id="currentDrives" class="tabcontent drives-container">
+        <h2>Current Drives</h2>
+        <div id="currentDrivesList" class="drive-list">
+            <!-- Current drives will be dynamically populated here -->
+        </div>
+    </div>
+    <div id="completedDrives" class="tabcontent drives-container">
+        <h2>Completed Drives</h2>
+        <div id="completedDrivesList" class="drive-list">
+            <!-- Completed drives will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Fetch current drives
+        fetch('/placement_officer/manage_drives/current')
+            .then(response => response.json())
+            .then(data => {
+                const currentDrivesList = document.getElementById('currentDrivesList');
+                data.forEach(drive => {
+                    const driveCard = document.createElement('div');
+                    driveCard.classList.add('drive-card');
+                    driveCard.innerHTML = `
+                        <h3>${drive.company_name}</h3>
+                        <p><strong>Job Role:</strong> ${drive.job_role}</p>
+                        <p><strong>Description:</strong> ${drive.job_description}</p>
+                        <button onclick="viewDrive(${drive.drive_id})">View Drive</button>
+                    `;
+                    currentDrivesList.appendChild(driveCard);
+                });
+            })
+            .catch(error => console.error('Error fetching current drives:', error));
+
+        // Fetch completed drives
+        fetch('/placement_officer/manage_drives/completed')
+            .then(response => response.json())
+            .then(data => {
+                const completedDrivesList = document.getElementById('completedDrivesList');
+                data.forEach(drive => {
+                    const driveCard = document.createElement('div');
+                    driveCard.classList.add('drive-card');
+                    driveCard.innerHTML = `
+                        <h3>${drive.company_name}</h3>
+                        <p><strong>Job Role:</strong> ${drive.job_role}</p>
+                        <p><strong>Description:</strong> ${drive.job_description}</p>
+                        <button onclick="viewDrive(${drive.drive_id})">View Drive</button>
+                    `;
+                    completedDrivesList.appendChild(driveCard);
+                });
+            })
+            .catch(error => console.error('Error fetching completed drives:', error));
+
+        function viewDrive(driveId) {
+            // Redirect to view drive page with driveId
+            window.location.href = `/placement_officer/view_drive/${driveId}`;
+        }
+    </script>
+</body>
+
+</html>
