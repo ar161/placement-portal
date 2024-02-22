@@ -28,4 +28,14 @@ driveModel.getDrivesByStatus = async (isCompleted) => {
     }
 };
 
+driveModel.getDriveById = async (driveId) => {
+    try {
+        const query = 'SELECT * FROM drives WHERE drive_id = ?';
+        const [rows] = await db.promise().execute(query, [driveId]);
+        return rows.length ? rows[0] : null; // Return the first row if found, otherwise return null
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = driveModel;

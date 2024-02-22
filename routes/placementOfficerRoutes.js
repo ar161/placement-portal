@@ -7,6 +7,7 @@ const programPlanningController = require('../controllers/placement_officer/prog
 const streamPlanningController = require('../controllers/placement_officer/streamPlanningController');
 const createDriveController = require('../controllers/placement_officer/createDriveController');
 const manageDrivesController = require('../controllers/placement_officer/manageDrivesController');
+const viewDriveController = require('../controllers/placement_officer/viewDriveController');
 const isAuthenticated = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -59,5 +60,8 @@ router.get('/manage_drives',isAuthenticated, roleMiddleware.checkOfficer, manage
 router.get('/manage_drives/current',isAuthenticated, roleMiddleware.checkOfficer, manageDrivesController.getCurrentDrives);
 // Route to fetch  Completed drives
 router.get('/manage_drives/completed',isAuthenticated, roleMiddleware.checkOfficer, manageDrivesController.getCompletedDrives);
+
+
+router.get('/view_drive',isAuthenticated, roleMiddleware.checkOfficer, viewDriveController.renderViewDrive);
 
 module.exports = router;

@@ -82,8 +82,8 @@
             .catch(error => console.error('Error fetching completed drives:', error));
 
         function viewDrive(driveId) {
-            // Redirect to view drive page with driveId
-            window.location.href = `/placement_officer/view_drive/${driveId}`;
+            // Redirect to view drive page with driveId as query parameter
+            window.location.href = `/placement_officer/view_drive?driveId=${driveId}`
         }
     </script>
 </body>
