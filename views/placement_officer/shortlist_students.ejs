@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortlist Students</title>
+    <link rel="stylesheet" href="../../css/shortlist_students.css">
+</head>
+
+<body>
+    <h1>Shortlist Students</h1>
+
+    <!-- Error and success messages -->
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+
+    <!-- Display drive and round details -->
+    <div class="details">
+        <h2>Drive Details</h2>
+        <p><strong>Company Name:</strong>
+            <%= drive.company_name %>
+        </p>
+        <p><strong>Date of Drive:</strong>
+            <%= drive.date_of_drive %>
+        </p>
+        <p><strong>Round Name:</strong>
+            <%= round.round_name %>
+        </p>
+        <p><strong>Round Date:</strong>
+            <%= round.round_date %>
+        </p>
+    </div>
+
+    <!-- Display student list with checkboxes -->
+    <form id="shortlistForm">
+        <h2>Students</h2>
+        <!-- Display message if no students available -->
+        <% if (students.length===0) { %>
+            <p>
+                No students available to shortlist for this round.
+            </p>
+            <% } %>
+                <% students.forEach(student=> { %>
+                    <div class="student">
+                        <label>
+                            <input type="checkbox" name="selectedStudents" value="<%= student.student_id %>">
+                            <%= student.name %>
+                        </label>
+                    </div>
+                    <% }); %>
+                        <button type="submit">Shortlist Students</button>
+    </form>
+
+    <script>
+        document.getElementById('shortlistForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+            const selectedStudents = Array.from(document.querySelectorAll('input[name="selectedStudents"]:checked')).map(input => input.value);
+            const driveId = '<%= drive.drive_id %>';
+            const roundId = '<%= round.round_id %>';
+            // Send selected students to the server
+            fetch('/placement_officer/view_drive/shortlist_students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    driveId: driveId,
+                    roundId: roundId,
+                    selectedStudents: selectedStudents
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Shortlisting successful, display success message
+                        document.getElementById('success-message').textContent = 'Students shortlisted successfully';
+                        document.getElementById('error-message').textContent = '';
+                    } else {
+                        // Error shortlisting students, display error message
+                        response.json().then(data => {
+                            document.getElementById('success-message').textContent = '';
+                            document.getElementById('error-message').textContent = data.error;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error shortlisting students:', error);
+                    alert('Failed to shortlist students');
+                });
+        });
+    </script>
+</body>
+
+</html>

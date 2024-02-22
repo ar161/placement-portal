@@ -32,3 +32,57 @@ exports.createRound = async (driveId, roundName, roundDescription, roundDate, ne
         throw error;
     }
 };
+
+// Fetch round details by round ID
+exports.getRoundById = async (roundId) => {
+    try {
+        const query = 'SELECT * FROM rounds WHERE round_id = ?';
+        const [rows] = await db.promise().execute(query, [roundId]);
+        return rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Fetch the ID of the previous round for a given drive and round ID
+exports.getPreviousRoundId = async (driveId, roundId) => {
+    try {
+        const query = 'SELECT round_id FROM rounds WHERE drive_id = ? AND round_id < ? ORDER BY round_id DESC LIMIT 1';
+        const [rows] = await db.promise().execute(query, [driveId, roundId]);
+        return rows.length > 0 ? rows[0].round_id : null;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Check if the specified drive belongs to the specified round
+exports.checkDriveBelongsToRound = async (driveId, roundId) => {
+    try {
+        const query = 'SELECT COUNT(*) AS count FROM rounds WHERE drive_id = ? AND round_id = ?';
+        const [rows] = await db.promise().execute(query, [driveId, roundId]);
+        return rows[0].count === 1;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Check if the round result has already been declared
+exports.isRoundResultDeclared = async (roundId) => {
+    try {
+        const query = 'SELECT round_result_declared FROM rounds WHERE round_id = ?';
+        const [rows] = await db.promise().execute(query, [roundId]);
+        return rows[0].round_result_declared === 1;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Update the round_result_declared field to true for the specified round
+exports.updateRoundResultDeclared = async (roundId) => {
+    try {
+        const query = 'UPDATE rounds SET round_result_declared = ? WHERE round_id = ?';
+        await db.promise().execute(query, [1, roundId]);
+    } catch (error) {
+        throw error;
+    }
+};
