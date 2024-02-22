@@ -27,6 +27,15 @@
         <p><strong>Job Description:</strong> <%= drive.job_description %></p>
         <p><strong>Result Declared:</strong> <%= drive.drive_result_declared ? 'Yes' : 'No' %></p>
     </div>
+    <button onclick="viewAppliedStudents()">View Applied Students</button>
+
+    <script>
+        function viewAppliedStudents() {
+            // Open a new window to display applied students
+            const driveId = <%= JSON.stringify(drive.drive_id) %>;
+            window.open(`/placement_officer/view_drive/applied_students?driveId=${driveId}`, '_blank');
+        }
+    </script>
 </body>
 
 </html>

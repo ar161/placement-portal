@@ -38,4 +38,36 @@ driveModel.getDriveById = async (driveId) => {
     }
 };
 
+// Model function to check if the drive ID exists
+driveModel.checkDriveExists = async (driveId) => {
+    try {
+        const query = 'SELECT COUNT(*) AS count FROM drives WHERE drive_id = ?';
+        const [rows] = await db.promise().execute(query, [driveId]);
+        return rows[0].count > 0;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Model function to fetch the details of applied students for a drive
+driveModel.getAppliedStudents = async (driveId) => {
+    try {
+
+        // Check if driveId is provided
+        if (!driveId) {
+            throw new Error("Drive ID is required.");
+        }
+        
+        const query = `
+            SELECT students.*, applications.drive_id 
+            FROM students 
+            INNER JOIN applications ON students.student_id = applications.student_id 
+            WHERE applications.drive_id = ?`;
+        const [rows] = await db.promise().execute(query, [driveId]);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = driveModel;

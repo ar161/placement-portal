@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Drive</title>
+    <link rel="stylesheet" href="../../css/view_drive.css">
+</head>
+
+<body>
+    <h1>View Drive</h1>
+    <div class="drive-details">
+        <h2>Drive Details</h2>
+        <!-- Render drive details here -->
+    </div>
+
+    <div class="applied-students">
+        <h2>Applied Students</h2>
+        <% if (appliedStudents.length === 0) { %>
+            <p>No students have applied for this drive yet.</p>
+        <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% appliedStudents.forEach(student => { %>
+                        <tr>
+                            <td><%= student.student_id %></td>
+                            <td><%= student.name %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</body>
+
+</html>

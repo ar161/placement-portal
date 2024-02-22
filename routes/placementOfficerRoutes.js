@@ -63,5 +63,8 @@ router.get('/manage_drives/completed',isAuthenticated, roleMiddleware.checkOffic
 
 
 router.get('/view_drive',isAuthenticated, roleMiddleware.checkOfficer, viewDriveController.renderViewDrive);
+// Route to get the list of applied students for a drive
+router.get('/view_drive/applied_students', isAuthenticated, roleMiddleware.checkOfficer, viewDriveController.renderAppliedStudents);
+
 
 module.exports = router;
