@@ -70,4 +70,21 @@ driveModel.getAppliedStudents = async (driveId) => {
     }
 };
 
+driveModel.isDriveResultDeclared = async (driveId) => {
+    try {
+        const query = 'SELECT drive_result_declared FROM drives WHERE drive_id = ?';
+        const [rows] = await db.promise().execute(query, [driveId]);
+        if (rows.length > 0) {
+            // If the drive is found, return whether the result is declared or not
+            return rows[0].drive_result_declared;
+        } else {
+            // If the drive is not found, return null 
+            return null; 
+            // or throw new Error('Drive not found');
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = driveModel;

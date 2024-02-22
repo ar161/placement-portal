@@ -10,31 +10,209 @@
 
 <body>
     <h1>View Drive</h1>
+
+    <!-- Error and success messages -->
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+
     <div class="drive-details">
         <h2>Drive Details</h2>
-        <p><strong>Company Name:</strong> <%= drive.company_name %></p>
-        <p><strong>Batch:</strong> <%= drive.batch %></p>
-        <p><strong>Eligibility 10th:</strong> <%= drive.eligibility_10th %></p>
-        <p><strong>Eligibility 12th:</strong> <%= drive.eligibility_12th %></p>
-        <p><strong>Eligibility CGPA:</strong> <%= drive.eligibility_cgpa %></p>
-        <p><strong>Package Type:</strong> <%= drive.package_type %></p>
-        <p><strong>Package Amount:</strong> <%= drive.package_amount %></p>
-        <p><strong>Bond:</strong> <%= drive.bond %></p>
-        <p><strong>Date of Drive:</strong> <%= drive.date_of_drive %></p>
-        <p><strong>Application Deadline:</strong> <%= drive.application_deadline %></p>
-        <p><strong>Job Location:</strong> <%= drive.job_location %></p>
-        <p><strong>Job Role:</strong> <%= drive.job_role %></p>
-        <p><strong>Job Description:</strong> <%= drive.job_description %></p>
-        <p><strong>Result Declared:</strong> <%= drive.drive_result_declared ? 'Yes' : 'No' %></p>
+        <p><strong>Company Name:</strong>
+            <%= drive.company_name %>
+        </p>
+        <p><strong>Batch:</strong>
+            <%= drive.batch %>
+        </p>
+        <p><strong>Eligibility 10th:</strong>
+            <%= drive.eligibility_10th %>
+        </p>
+        <p><strong>Eligibility 12th:</strong>
+            <%= drive.eligibility_12th %>
+        </p>
+        <p><strong>Eligibility CGPA:</strong>
+            <%= drive.eligibility_cgpa %>
+        </p>
+        <p><strong>Package Type:</strong>
+            <%= drive.package_type %>
+        </p>
+        <p><strong>Package Amount:</strong>
+            <%= drive.package_amount %>
+        </p>
+        <p><strong>Bond:</strong>
+            <%= drive.bond %>
+        </p>
+        <p><strong>Date of Drive:</strong>
+            <%= drive.date_of_drive %>
+        </p>
+        <p><strong>Application Deadline:</strong>
+            <%= drive.application_deadline %>
+        </p>
+        <p><strong>Job Location:</strong>
+            <%= drive.job_location %>
+        </p>
+        <p><strong>Job Role:</strong>
+            <%= drive.job_role %>
+        </p>
+        <p><strong>Job Description:</strong>
+            <%= drive.job_description %>
+        </p>
+        <p><strong>Result Declared:</strong>
+            <%= drive.drive_result_declared ? 'Yes' : 'No' %>
+        </p>
     </div>
     <button onclick="viewAppliedStudents()">View Applied Students</button>
 
+    <!-- Button to open create round modal -->
+    <button id="createRoundBtn">Create Round</button>
+
+    <!-- Modal for creating a new round -->
+    <div id="createRoundModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="createRoundForm">
+                <input type="hidden" id="driveId" name="driveId" value="<%= drive.drive_id %>">
+                <label for="roundName">Round Name:</label>
+                <input type="text" id="roundName" name="roundName" required><br>
+                <label for="roundDescription">Round Description:</label>
+                <input type="text" id="roundDescription" name="roundDescription" required><br>
+                <label for="roundDate">Round Date:</label>
+                <input type="date" id="roundDate" name="roundDate" required><br>
+                <button type="submit">Create Round</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display all rounds -->
+    <h2>Rounds</h2>
+    <div id="roundsList" class="rounds-container">
+        <!-- Rounds will be dynamically populated here -->
+    </div>
+
     <script>
+
         function viewAppliedStudents() {
             // Open a new window to display applied students
             const driveId = <%= JSON.stringify(drive.drive_id) %>;
             window.open(`/placement_officer/view_drive/applied_students?driveId=${driveId}`, '_blank');
         }
+
+        function createRound() {
+            // Get the round details from the form
+            const driveId = document.getElementById('driveId').value;
+            const roundName = document.getElementById('roundName').value;
+            const roundDate = document.getElementById('roundDate').value;
+            const roundDescription = document.getElementById('roundDescription').value;
+
+            // Send a POST request to the server to create the round
+            fetch('/placement_officer/view_drive/create_round', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    driveId: driveId,
+                    roundName: roundName,
+                    roundDate: roundDate,
+                    roundDescription: roundDescription
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Round created successfully, display success message
+                        document.getElementById('success-message').textContent = 'Round created successfully';
+                        // Reload rounds after successful creation
+                        fetchRounds();
+                    } else {
+                        // Error creating round, display error message
+                        response.json().then(data => {
+                            document.getElementById('error-message').textContent = data.error;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating round:', error);
+                    // Display error message
+                    document.getElementById('error-message').textContent = 'Error creating round';
+                });
+        }
+
+        // Function to fetch rounds and display them
+        function fetchRounds() {
+            fetch(`/placement_officer/view_drive/rounds?driveId=<%= drive.drive_id %>`)
+                .then(response => response.json())
+                .then(rounds => {
+                    const roundsContainer = document.getElementById('roundsList');
+                    roundsContainer.innerHTML = ''; // Clear existing rounds
+                    rounds.forEach(round => {
+                        const roundCard = document.createElement('div');
+                        roundCard.classList.add('round-card');
+
+                        const roundDetails = document.createElement('div');
+                        roundDetails.classList.add('round-details');
+                        roundDetails.innerHTML = `
+                    <p><strong>Round Name:</strong> ${round.round_description}</p>
+                    <p><strong>Round Date:</strong> ${round.round_date}</p>
+                `;
+
+                        const shortlistButton = document.createElement('button');
+                        shortlistButton.textContent = 'Shortlist Students';
+                        shortlistButton.onclick = function () {
+                            openShortlistWindow(round.round_id); // Pass round ID to the function
+                        };
+
+                        roundCard.appendChild(roundDetails);
+                        roundCard.appendChild(shortlistButton);
+                        roundsContainer.appendChild(roundCard);
+                    });
+                })
+                .catch(error => console.error('Error fetching rounds:', error));
+        }
+
+        // Function to open a new window for shortlisting
+        function openShortlistWindow(roundId) {
+            const driveId = <%= JSON.stringify(drive.drive_id) %>;
+            window.open(`/placement_officer/view_drive/shortlist_students?driveId=${driveId}&roundId=${roundId}`, '_blank');
+        }
+
+        // Fetch rounds asynchronously on page load
+        fetchRounds();
+
+        // Get the form
+        var form = document.getElementById("createRoundForm");
+
+        // When the user submits the form, call createRound function
+        form.onsubmit = function (event) {
+            event.preventDefault(); // Prevent default form submission behavior
+            createRound(); // Call function to create round
+            modal.style.display = "none"; // Close the modal after submission
+        }
+
+        // Get the modal
+        var modal = document.getElementById('createRoundModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("createRoundBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
     </script>
 </body>
 

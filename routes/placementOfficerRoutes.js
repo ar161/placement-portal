@@ -8,6 +8,7 @@ const streamPlanningController = require('../controllers/placement_officer/strea
 const createDriveController = require('../controllers/placement_officer/createDriveController');
 const manageDrivesController = require('../controllers/placement_officer/manageDrivesController');
 const viewDriveController = require('../controllers/placement_officer/viewDriveController');
+const roundController = require('../controllers/placement_officer/roundController');
 const isAuthenticated = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -66,5 +67,9 @@ router.get('/view_drive',isAuthenticated, roleMiddleware.checkOfficer, viewDrive
 // Route to get the list of applied students for a drive
 router.get('/view_drive/applied_students', isAuthenticated, roleMiddleware.checkOfficer, viewDriveController.renderAppliedStudents);
 
+// Route to get the list of rounds for a drive
+router.get('/view_drive/rounds', isAuthenticated, roleMiddleware.checkOfficer, roundController.getRoundsForDrive);
+// Route to create rounds for a drive
+router.post('/view_drive/create_round', isAuthenticated, roleMiddleware.checkOfficer, roundController.createRound);
 
 module.exports = router;
