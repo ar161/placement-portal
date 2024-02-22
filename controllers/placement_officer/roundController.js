@@ -35,6 +35,7 @@ exports.createRound = async (req, res) => {
     }
 
     try {
+
         // Check if the drive ID exists
         const driveExists = await driveModel.checkDriveExists(driveId);
         if (!driveExists) {
@@ -46,9 +47,15 @@ exports.createRound = async (req, res) => {
         if (driveResultDeclared) {
             return res.status(400).json({ error: 'Drive result is already declared. Cannot create a new round.' });
         }
+        
+        // Find the highest drive_round_sequence for the given drive
+        const highestSequence = await roundModel.getHighestSequenceForDrive(driveId);
+
+        // Increment the highest sequence by 1 to assign the next sequence number
+        const nextSequence = highestSequence + 1;
 
         // Call a method in the roundModel to create the round
-        await roundModel.createRound(driveId, roundName, roundDescription, roundDate );
+        await roundModel.createRound(driveId, roundName, roundDescription, roundDate, nextSequence );
         res.status(200).json({ success: 'Round created successfully' });
     } catch (error) {
         console.error('Error creating round:', error);
