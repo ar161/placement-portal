@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Drives</title>
+    <link rel="stylesheet" href="../../css/manage_drives.css">
+</head>
+
+<body>
+    <h1>Manage Drives</h1>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'upcomingDrives')">Upcoming Drives</button>
+        <button class="tablinks" onclick="openTab(event, 'appliedDrives')">Applied Drives</button>
+    </div>
+
+    <div id="upcomingDrives" class="tabcontent drives-container">
+        <h2>Upcoming Drives</h2>
+        <div id="upcomingDrivesList" class="drive-list">
+            <!-- Upcoming drives will be dynamically populated here -->
+        </div>
+    </div>
+    <div id="appliedDrives" class="tabcontent drives-container">
+        <h2>Applied Drives</h2>
+        <div id="appliedDrivesList" class="drive-list">
+            <!-- Applied drives will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Fetch upcoming drives
+        fetch('/student/view_drive_list/upcoming')
+            .then(response => response.json())
+            .then(data => {
+                const upcomingDrivesList = document.getElementById('upcomingDrivesList');
+                data.forEach(drive => {
+                    const driveCard = document.createElement('div');
+                    driveCard.classList.add('drive-card');
+                    driveCard.innerHTML = `
+                        <h3>${drive.company_name}</h3>
+                        <p><strong>Job Role:</strong> ${drive.job_role}</p>
+                        <p><strong>Description:</strong> ${drive.job_description}</p>
+                        <button onclick="viewDrive(${drive.drive_id})">View Drive</button>
+                    `;
+                    upcomingDrivesList.appendChild(driveCard);
+                });
+            })
+            .catch(error => console.error('Error fetching upcoming drives:', error));
+
+        // Fetch applied drives
+        fetch('/student/view_drive_list/applied')
+            .then(response => response.json())
+            .then(data => {
+                const appliedDrivesList = document.getElementById('appliedDrivesList');
+                data.forEach(drive => {
+                    const driveCard = document.createElement('div');
+                    driveCard.classList.add('drive-card');
+                    driveCard.innerHTML = `
+                        <h3>${drive.company_name}</h3>
+                        <p><strong>Job Role:</strong> ${drive.job_role}</p>
+                        <p><strong>Description:</strong> ${drive.job_description}</p>
+                        <button onclick="viewDrive(${drive.drive_id})">View Drive</button>
+                    `;
+                    appliedDrivesList.appendChild(driveCard);
+                });
+            })
+            .catch(error => console.error('Error fetching applied drives:', error));
+
+        function viewDrive(driveId) {
+            // Redirect to view drive page with driveId as query parameter
+            window.location.href = `/student/view_drive?driveId=${driveId}`;
+        }
+    </script>
+</body>
+
+</html>

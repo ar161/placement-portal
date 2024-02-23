@@ -98,4 +98,42 @@ driveModel.updateDriveResultDeclared = async (driveId) => {
     }
 };
 
+// Function to fetch upcoming drives based on student ID, program ID, and stream ID
+driveModel.getUpcomingDrives = async (studentId) => {
+    try {
+        const query = `
+            SELECT d.* 
+            FROM drives d
+            JOIN drive_for df ON d.drive_id = df.drive_id
+            JOIN students s ON s.program_id = df.program_id AND s.stream_id = df.stream_id
+            WHERE d.application_deadline > NOW()
+            AND d.drive_id NOT IN (
+                SELECT drive_id FROM applications WHERE student_id = ?
+            )
+        `;
+        const [rows] = await db.promise().query(query, [studentId]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching upcoming drives:', error);
+        throw error;
+    }
+};
+
+// Function to fetch applied drives for a student
+driveModel.getAppliedDrives = async (studentId) => {
+    try {
+        const query = `
+            SELECT d.*
+            FROM drives d
+            JOIN applications a ON d.drive_id = a.drive_id
+            WHERE a.student_id = ?
+        `;
+        const [rows] = await db.promise().query(query, [studentId]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching applied drives:', error);
+        throw error;
+    }
+};
+
 module.exports = driveModel;

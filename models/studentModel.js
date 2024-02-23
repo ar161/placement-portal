@@ -125,4 +125,19 @@ const studentModel = {
   }
 };
 
+studentModel.getStudentIdByUserId = async (userId) => {
+  try {
+      const query = 'SELECT student_id FROM students WHERE user_id = ?';
+      const [rows] = await db.promise().query(query, [userId]);
+      if (rows.length > 0) {
+          return rows[0].student_id;
+      } else {
+          return null; // Return null if student not found
+      }
+  } catch (error) {
+      console.error('Error fetching student ID by user ID:', error);
+      throw error;
+  }
+};
+
 module.exports = studentModel;
