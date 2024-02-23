@@ -86,3 +86,14 @@ exports.updateRoundResultDeclared = async (roundId) => {
         throw error;
     }
 };
+
+exports.getLastRound = async (driveId) => {
+    try {
+        const query = 'SELECT * FROM rounds WHERE drive_id = ? ORDER BY drive_round_sequence DESC LIMIT 1';
+        const [rows] = await db.promise().query(query, [driveId]);
+        return rows[0]; // Return the last round
+    } catch (error) {
+        console.error('Error getting last round:', error);
+        throw error;
+    }
+};

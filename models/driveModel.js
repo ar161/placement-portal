@@ -87,4 +87,15 @@ driveModel.isDriveResultDeclared = async (driveId) => {
     }
 };
 
+driveModel.updateDriveResultDeclared = async (driveId) => {
+    try {
+        const query = 'UPDATE drives SET drive_result_declared = ? WHERE drive_id = ?';
+        const [result] = await db.promise().query(query, [true, driveId]);
+        return result.affectedRows > 0; // Check if any rows were affected
+    } catch (error) {
+        console.error('Error updating drive result declared:', error);
+        throw error;
+    }
+};
+
 module.exports = driveModel;

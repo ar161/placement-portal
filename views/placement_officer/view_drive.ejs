@@ -88,6 +88,8 @@
         <!-- Rounds will be dynamically populated here -->
     </div>
 
+    <button id="declareFinalResultBtn">Declare Final Result</button>
+
     <script>
 
         function viewAppliedStudents() {
@@ -186,6 +188,38 @@
             event.preventDefault(); // Prevent default form submission behavior
             createRound(); // Call function to create round
             modal.style.display = "none"; // Close the modal after submission
+        }
+
+        // Get the declare final result button
+        const declareFinalResultBtn = document.getElementById("declareFinalResultBtn");
+
+        // Add event listener to the declare final result button
+        declareFinalResultBtn.addEventListener("click", declareFinalResult);
+
+        // Function to declare the final result of the drive
+        async function declareFinalResult() {
+            const driveId = '<%= drive.drive_id %>'; // Get the drive ID
+            try {
+                const response = await fetch('/placement_officer/view_drive/declare_final_result', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ driveId })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('success-message').textContent = data.success;
+                    document.getElementById('error-message').textContent = '';
+                } else {
+                    document.getElementById('error-message').textContent = data.error;
+                    document.getElementById('success-message').textContent = '';
+                }
+            } catch (error) {
+                console.error('Error declaring final result:', error);
+                document.getElementById('error-message').textContent = 'Failed to declare final result';
+                document.getElementById('success-message').textContent = '';
+            }
         }
 
         // Get the modal
