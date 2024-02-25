@@ -70,7 +70,7 @@ router.get('/view_drive',isAuthenticated, roleMiddleware.checkOfficer, viewDrive
 router.get('/view_drive/applied_students', isAuthenticated, roleMiddleware.checkOfficer, viewDriveController.renderAppliedStudents);
 
 // Route to get the list of rounds for a drive
-router.get('/view_drive/rounds', isAuthenticated, roleMiddleware.checkOfficer, roundController.getRoundsForDrive);
+router.get('/view_drive/rounds', isAuthenticated, roleMiddleware.checkOfficerOrStudent, roundController.getRoundsForDrive);
 // Route to create rounds for a drive
 router.post('/view_drive/create_round', isAuthenticated, roleMiddleware.checkOfficer, roundController.createRound);
 

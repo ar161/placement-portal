@@ -140,4 +140,42 @@ studentModel.getStudentIdByUserId = async (userId) => {
   }
 };
 
+// Function to check eligibility requirements against student data
+studentModel.checkDriveEligibility = async (studentId, driveId) => {
+  try {
+      // Fetch student details
+      const [studentRows] = await db.promise().execute('SELECT * FROM students WHERE student_id = ?', [studentId]);
+      if (studentRows.length === 0) {
+          throw new Error('Student not found');
+      }
+      const student = studentRows[0];
+
+      // Fetch drive details
+      const [driveRows] = await db.promise().execute('SELECT * FROM drives WHERE drive_id = ?', [driveId]);
+      if (driveRows.length === 0) {
+          throw new Error('Drive not found');
+      }
+      const drive = driveRows[0];
+
+      // Check if the student's program ID and stream ID match with those specified for the drive
+      const [driveForRows] = await db.promise().execute('SELECT * FROM drive_for WHERE drive_id = ?', [driveId]);
+      const matchingDriveFor = driveForRows.find(df => df.program_id === student.program_id && df.stream_id === student.stream_id);
+      if (!matchingDriveFor) {
+          return false; // Program ID and/or stream ID do not match
+      }
+
+      // Check if student's 10th percentage, 12th percentage, and CGPA meet eligibility criteria
+      if (student.tenth_percent >= drive.eligibility_10th &&
+          student.twelth_percent >= drive.eligibility_12th &&
+          student.cgpa >= drive.eligibility_cgpa) {
+          return true; // Student meets eligibility criteria
+      } else {
+          return false; // Student does not meet eligibility criteria
+      }
+  } catch (error) {
+      console.error('Error checking drive eligibility:', error);
+      throw error;
+  }
+};
+
 module.exports = studentModel;

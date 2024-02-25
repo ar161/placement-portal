@@ -1,0 +1,188 @@
+<!-- view_drive_student.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Drive</title>
+    <link rel="stylesheet" href="../../css/view_drive.css">
+</head>
+
+<body>
+    <h1>View Drive</h1>
+
+    <!-- Error and success messages -->
+    <div id="error-message" style="color: red;"></div>
+    <div id="success-message" style="color: green;"></div>
+
+    <div class="drive-details">
+        <h2>Drive Details</h2>
+        <p><strong>Company Name:</strong>
+            <%= drive.company_name %>
+        </p>
+    </div>
+
+    <button id="applyButton" <% if (appliedStatus) { %> disabled <% } %>> Apply </button>
+
+    <!-- Display all rounds -->
+    <h2>Rounds</h2>
+    <div id="roundsList" class="rounds-container">
+        <!-- Rounds will be dynamically populated here -->
+    </div>
+
+    <!-- Display final result -->
+    <h2>Final Result</h2>
+    <div id="finalResult">
+        <% if (!appliedStatus) { %>
+            <p>You have not applied for this drive yet.</p>
+            <% } %>
+    </div>
+
+    <script>
+
+        // Fetch and display rounds
+        async function fetchRounds() {
+            try {
+                const response = await fetch(`/placement_officer/view_drive/rounds?driveId=<%= drive.drive_id %>`);
+                const rounds = await response.json();
+                const isApplied = <%= appliedStatus %>;
+                let isRejected = false;
+
+                const roundsContainer = document.getElementById('roundsList');
+                roundsContainer.innerHTML = ''; // Clear existing rounds
+
+                // Render each round
+                for (const round of rounds) {
+                    const roundCard = document.createElement('div');
+                    roundCard.classList.add('round-card');
+
+                    const roundDetails = document.createElement('div');
+                    roundDetails.classList.add('round-details');
+                    roundDetails.innerHTML = `
+                <p><strong>Round Name:</strong> ${round.round_name}</p>
+                <p><strong>Round Description:</strong> ${round.round_description}</p>
+                <p><strong>Round Date:</strong> ${round.round_date}</p>
+            `;
+
+                    // Fetch round status only if applied and not rejected
+                    if (isApplied && !isRejected) {
+                        const roundStatus = await fetchRoundStatus(round.round_id);
+                        // If student is rejected in any round, set the flag
+                        if (roundStatus.status !== 'Selected') {
+                            isRejected = true;
+                        }
+                        if (roundStatus) {
+                            roundDetails.innerHTML += `
+                        <p><strong>Round Status:</strong> ${roundStatus.status}</p>
+                    `;
+                        }
+                    }
+
+                    roundCard.appendChild(roundDetails);
+                    roundsContainer.appendChild(roundCard);
+                }
+            } catch (error) {
+                console.error('Error fetching rounds:', error);
+            }
+        }
+
+        // Function to fetch and display round status for a specific round
+        async function fetchRoundStatus(roundId) {
+            try {
+                const response = await fetch(`/student/view_drive/round_status?driveId=<%= drive.drive_id %>&roundId=${roundId}`);
+                const roundStatus = await response.json();
+                return roundStatus;
+            } catch (error) {
+                console.error(`Error fetching round status for round ${roundId}:`, error);
+                return null; // Return null if an error occurs
+            }
+        }
+
+        // Call fetchRounds function to initiate fetching and displaying rounds
+        fetchRounds();
+
+        // Function to fetch the final result status
+        async function fetchFinalResultStatus() {
+            try {
+                const response = await fetch(`/student/view_drive/final_result_status?driveId=<%= drive.drive_id %>`);
+                const data = await response.json();
+                return data.finalResultStatus;
+            } catch (error) {
+                console.error('Error fetching final result status:', error);
+                return null;
+            }
+        }
+
+        // Function to display final result
+        async function displayFinalResult() {
+            try {
+                const finalResultStatus = await fetchFinalResultStatus();
+                const finalResultContainer = document.getElementById('finalResult');
+                finalResultContainer.innerHTML = ''; // Clear previous content
+
+                // Check if final result status is available
+                if (finalResultStatus) {
+                    if (finalResultStatus === 'Selected') {
+                        finalResultContainer.innerHTML = '<p>Congratulations! You have been selected for this drive.</p>';
+                    } else if (finalResultStatus === 'Rejected') {
+                        finalResultContainer.innerHTML = '<p>We regret to inform you that you have not been selected for this drive.</p>';
+                    } else {
+                        finalResultContainer.innerHTML = '<p>The final result for this drive is not yet declared.</p>';
+                    }
+                } else {
+                    finalResultContainer.innerHTML = '<p>The final result for this drive is not yet available.</p>';
+                }
+            } catch (error) {
+                console.error('Error displaying final result:', error);
+            }
+        }
+
+        if (<%= appliedStatus %>) {
+            // Call displayFinalResult function to fetch and display final result status
+            displayFinalResult();
+        }
+
+        // Add event listener to apply button if not already applied
+        document.addEventListener('DOMContentLoaded', () => {
+            const appliedStatus = <%= appliedStatus %>;
+            if (!appliedStatus) {
+                document.getElementById('applyButton').addEventListener('click', applyForDrive);
+            } else {
+                document.getElementById('applyButton').disabled = true;
+            }
+        });
+
+        // Function to apply for the drive
+        function applyForDrive() {
+            // Send a request to apply for the drive
+            fetch('/student/view_drive/apply_for_drive', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ driveId: <%= drive.drive_id %> })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('success-message').textContent = '';
+                        document.getElementById('error-message').textContent = data.error;
+                    } else {
+                        document.getElementById('error-message').textContent = '';
+                        document.getElementById('success-message').textContent = data.success;
+                        document.getElementById('applyButton').disabled = true;
+                        displayFinalResult();
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('success-message').textContent = '';
+                    document.getElementById('error-message').textContent = 'Error Applying';
+                });
+        }
+
+    </script>
+</body>
+
+</html>

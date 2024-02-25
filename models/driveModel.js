@@ -136,4 +136,30 @@ driveModel.getAppliedDrives = async (studentId) => {
     }
 };
 
+// Function to get the final result status for a student in a drive
+driveModel.getFinalResultStatus = async (studentId, driveId) => {
+    try {
+        // Check if the result has been declared for the drive
+        const query = 'SELECT drive_result_declared FROM drives WHERE drive_id = ?';
+        const [driveRows] = await db.promise().execute(query, [driveId]);
+        const resultDeclared = driveRows[0].drive_result_declared === 1;
+
+        if (!resultDeclared) {
+            return 'Result Not Declared';
+        }
+
+        // Check if the student is placed in the drive
+        const placedQuery = 'SELECT * FROM placed WHERE student_id = ? AND drive_id = ?';
+        const [placedRows] = await db.promise().execute(placedQuery, [studentId, driveId]);
+        
+        if (placedRows.length > 0) {
+            return 'Selected';
+        } else {
+            return 'Rejected';
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = driveModel;
