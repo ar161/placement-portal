@@ -15,7 +15,7 @@ const checkRole = (allowedRole) => {
           if (err) {
             console.error('Error destroying session:', err);
           }
-          res.redirect('/login');
+          res.render('login', { error: 'Access Denied' });
         });
       }
     };
