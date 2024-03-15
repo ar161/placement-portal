@@ -57,7 +57,7 @@ driveModel.getAppliedStudents = async (driveId) => {
         if (!driveId) {
             throw new Error("Drive ID is required.");
         }
-        
+
         const query = `
             SELECT students.*, applications.drive_id 
             FROM students 
@@ -79,7 +79,7 @@ driveModel.isDriveResultDeclared = async (driveId) => {
             return rows[0].drive_result_declared;
         } else {
             // If the drive is not found, return null 
-            return null; 
+            return null;
             // or throw new Error('Drive not found');
         }
     } catch (error) {
@@ -102,16 +102,17 @@ driveModel.updateDriveResultDeclared = async (driveId) => {
 driveModel.getUpcomingDrives = async (studentId) => {
     try {
         const query = `
-            SELECT d.* 
-            FROM drives d
-            JOIN drive_for df ON d.drive_id = df.drive_id
-            JOIN students s ON s.program_id = df.program_id AND s.stream_id = df.stream_id
-            WHERE d.application_deadline > NOW()
-            AND d.drive_id NOT IN (
-                SELECT drive_id FROM applications WHERE student_id = ?
-            )
+        SELECT DISTINCT d.* 
+        FROM drives d
+        JOIN drive_for df ON d.drive_id = df.drive_id
+        JOIN students s ON s.program_id = df.program_id AND s.stream_id = df.stream_id AND s.student_id = ?
+        WHERE d.application_deadline > NOW()
+        AND d.drive_id NOT IN (
+            SELECT drive_id FROM applications WHERE student_id = ?
+        )
+        ORDER BY d.date_created DESC;
         `;
-        const [rows] = await db.promise().query(query, [studentId]);
+        const [rows] = await db.promise().query(query, [studentId, studentId]);
         return rows;
     } catch (error) {
         console.error('Error fetching upcoming drives:', error);
@@ -127,6 +128,7 @@ driveModel.getAppliedDrives = async (studentId) => {
             FROM drives d
             JOIN applications a ON d.drive_id = a.drive_id
             WHERE a.student_id = ?
+            ORDER BY a.date_applied DESC;
         `;
         const [rows] = await db.promise().query(query, [studentId]);
         return rows;
@@ -151,7 +153,7 @@ driveModel.getFinalResultStatus = async (studentId, driveId) => {
         // Check if the student is placed in the drive
         const placedQuery = 'SELECT * FROM placed WHERE student_id = ? AND drive_id = ?';
         const [placedRows] = await db.promise().execute(placedQuery, [studentId, driveId]);
-        
+
         if (placedRows.length > 0) {
             return 'Selected';
         } else {
