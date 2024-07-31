@@ -4,14 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View TPOs</title>
+    <title>View Placement Officers</title>
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 <body>
-    <h1>List of TPOs</h1>
-    <ul>
-        <% tpos.forEach(tpo => { %>
-            <li><%= tpo.name %> - <%= tpo.email %></li>
-        <% }); %>
-    </ul>
+
+    <%- include('../partials/nav-admin'); %>
+
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+                <i class="uil uil-user-circle user-circle"></i>
+            </div>
+        </div>
+
+        <div class="dash-content">
+            <div class="activity">
+                <div class="title">
+                    <i class="uil uil-eye"></i>
+                    <span class="text">Training Placement Officers</span>
+                </div>
+                <div class="activity-data">
+                    <div class="data name">
+                        <span class="data-title">User Name</span>
+
+                        <% tpos.forEach(tpo=> { %>
+                            <span class="data-list">
+                                <%= tpo.username %>
+                            </span>
+                            <% }); %>
+                                </span>
+                    </div>
+                    <div class="data email">
+                        <span class="data-title">Name</span>
+
+                        <% tpos.forEach(tpo=> { %>
+                            <span class="data-list">
+                                <%= tpo.name %>
+                            </span>
+                            <% }); %>
+                                </span>
+                    </div>
+                    <div class="data joined">
+                        <span class="data-title">Email</span>
+
+                        <% tpos.forEach(tpo=> { %>
+                            <span class="data-list">
+                                <%= tpo.email %>
+                            </span>
+                            <% }); %>
+                                </span>
+                    </div>
+                    <div class="data type">
+                        <span class="data-title">Contact</span>
+
+                        <% tpos.forEach(tpo=> { %>
+                            <span class="data-list">
+                                <%= tpo.contact_no %>
+                            </span>
+                            <% }); %>
+                                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/nav.js"></script>
+
 </body>
+
 </html>

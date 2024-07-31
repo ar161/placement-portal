@@ -1,0 +1,118 @@
+/* Form container styles */
+.form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;    
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+}
+
+/* Error message styles */
+#error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+#success-message {
+    color: green;
+    margin-bottom: 15px;
+}
+
+/* Form input styles */
+#addStreamForm input[type="text"],
+#addStreamForm select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Button styles */
+#addStreamForm button[type="submit"] {
+    border: none;
+    color: white;
+    background: #1560BD;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#addStreamForm button[type="submit"]:hover {
+    background: #0c4a8c;
+}
+
+/* Table styles */
+.form table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.form table th,
+.form table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.form table th {
+    background-color: #f5f5f5;
+}
+
+
+/* Edit and delete button styles */
+.action-buttons{
+    display: flex;
+    /* justify-content: space-around; */
+}
+
+.edit-delete-buttons {
+    display: flex;
+    margin:5px;
+    padding: 10px;
+    /* align-items: center;  */
+}
+
+.editStreamForm{
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.editStreamName{
+    display: inline;
+    border-radius: 10px;
+    height: 45px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.edit-delete-buttons button {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px; /* Adjust spacing between buttons */
+}
+
+button.edit {
+    background-color: #3498db;
+    color: white;
+    height: 45px;
+    border-radius: 5px;
+    cursor:pointer;
+}
+
+button.delete {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 5px;
+    height: 45px;
+    cursor:pointer;
+}
+
+.edit-delete-buttons button:hover {
+    opacity: 0.8;
+}

@@ -6,33 +6,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program Planning</title>
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="/css/officer/program_planning.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 <body>
-    <h1>Programs</h1>
 
-    <!-- Error and success messages -->
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
 
-    <!-- Form for adding a new program -->
-    <form id="addProgramForm">
-        <input type="text" id="programName" placeholder="Enter Program Name" required>
-        <button type="submit">Add Program</button>
-    </form>
+    <%- include('../partials/nav-officer'); %>
 
-    <!-- Table to display existing programs -->
-    <table>
-        <thead>
-            <tr>
-                <th>Program Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="programList">
-            <!-- Program rows will be dynamically added here -->
-        </tbody>
-    </table>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+    
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
 
+            </div>
+        </div>
+    
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-list-ul"></i>
+                    <span class="text">Program Planning</span>
+                </div>
+    
+                <div class="form">
+                        <!-- Error and success messages -->
+                    <div id="error-message" style="color: red;"></div>
+                    <div id="success-message" style="color: green;"></div>
+                                
+                    <!-- Form for adding a new program -->
+                    <form id="addProgramForm">
+                        <input type="text" id="programName" placeholder="Enter Program Name" required>
+                        <button type="submit">Add Program</button>
+                    </form>
+
+                    <!-- Table to display existing programs -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Program Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="programList">
+                            <!-- Program rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="/js/nav.js"></script>
     <script>
         // Function to clear error and success messages
         function clearMessages() {
@@ -81,18 +113,19 @@
                         },
                         body: JSON.stringify({ programId })
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            clearMessages();
+                    .then(response => response.json())
+                    .then(data=> {
+                        clearMessages();
+                        if (data.success) {
                             // Remove program row from the table
                             const programRow = document.getElementById(programId);
                             programRow.remove();
+                            document.getElementById('success-message').textContent = data.success;
+                            // Check if there are no programs left
+                            if (document.querySelectorAll('.deleteProgramForm').length === 0) {
+                                    document.getElementById('programList').innerHTML = '<tr><td colspan="3">No programs available</td></tr>';
+                                }
                         } else {
-                            return response.json();
-                        }
-                    })
-                    .then(data => {
-                        if (data && data.error) {
                             document.getElementById('error-message').textContent = data.error;
                         }
                     })
@@ -112,13 +145,13 @@
                 programs.forEach(program => {
                     const newRow = `<tr id="${program.program_id}">
                                         <td>${program.program_name}</td>
-                                        <td>
+                                        <td class="action-buttons">
                                             <form class="editProgramForm" data-id="${program.program_id}">
-                                                <input type="text" class="editProgramName" placeholder="Enter new name" required>
-                                                <button type="submit">Edit</button>
+                                                <input type="text" class="editProgramName" placeholder="Enter new program" required>
+                                                <button type="submit" class="edit-delete-buttons edit"><i class="uil uil-edit-alt"></i></button>
                                             </form>
                                             <form class="deleteProgramForm" data-id="${program.program_id}">
-                                                <button type="submit">Delete</button>
+                                                <button type="submit" class="edit-delete-buttons delete"><i class="uil uil-trash-alt"></i></button>
                                             </form>
                                         </td>
                                     </tr>`;

@@ -5,91 +5,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Drive</title>
-    <link rel="stylesheet" href="../../css/view_drive.css">
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="../../css/officer/view_drive.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 
 <body>
-    <h1>View Drive</h1>
-
-    <!-- Error and success messages -->
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
-
-    <div class="drive-details">
-        <h2>Drive Details</h2>
-        <p><strong>Company Name:</strong>
-            <%= drive.company_name %>
-        </p>
-        <p><strong>Batch:</strong>
-            <%= drive.batch %>
-        </p>
-        <p><strong>Eligibility 10th:</strong>
-            <%= drive.eligibility_10th %>
-        </p>
-        <p><strong>Eligibility 12th:</strong>
-            <%= drive.eligibility_12th %>
-        </p>
-        <p><strong>Eligibility CGPA:</strong>
-            <%= drive.eligibility_cgpa %>
-        </p>
-        <p><strong>Package Type:</strong>
-            <%= drive.package_type %>
-        </p>
-        <p><strong>Package Amount:</strong>
-            <%= drive.package_amount %>
-        </p>
-        <p><strong>Bond:</strong>
-            <%= drive.bond %>
-        </p>
-        <p><strong>Date of Drive:</strong>
-            <%= drive.date_of_drive %>
-        </p>
-        <p><strong>Application Deadline:</strong>
-            <%= drive.application_deadline %>
-        </p>
-        <p><strong>Job Location:</strong>
-            <%= drive.job_location %>
-        </p>
-        <p><strong>Job Role:</strong>
-            <%= drive.job_role %>
-        </p>
-        <p><strong>Job Description:</strong>
-            <%= drive.job_description %>
-        </p>
-        <p><strong>Result Declared:</strong>
-            <%= drive.drive_result_declared ? 'Yes' : 'No' %>
-        </p>
-    </div>
-    <button onclick="viewAppliedStudents()">View Applied Students</button>
-
-    <!-- Button to open create round modal -->
-    <button id="createRoundBtn">Create Round</button>
-
-    <!-- Modal for creating a new round -->
-    <div id="createRoundModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="createRoundForm">
-                <input type="hidden" id="driveId" name="driveId" value="<%= drive.drive_id %>">
-                <label for="roundName">Round Name:</label>
-                <input type="text" id="roundName" name="roundName" required><br>
-                <label for="roundDescription">Round Description:</label>
-                <input type="text" id="roundDescription" name="roundDescription" required><br>
-                <label for="roundDate">Round Date:</label>
-                <input type="date" id="roundDate" name="roundDate" required><br>
-                <button type="submit">Create Round</button>
-            </form>
+    <%- include('../partials/nav-officer'); %>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+      
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
+              
+            </div>
         </div>
-    </div>
+        <div class="dash-content" >
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-graduation-cap"></i>
+                    <span class="text">View Drive</span>
+                </div>
 
-    <!-- Display all rounds -->
-    <h2>Rounds</h2>
-    <div id="roundsList" class="rounds-container">
-        <!-- Rounds will be dynamically populated here -->
-    </div>
+                <!-- Error and success messages -->
+                <div id="error-message" style="color: red;"></div>
+                <div id="success-message" style="color: green;"></div>
 
-    <button id="declareFinalResultBtn">Declare Final Result</button>
+                <div class="drive-details">
+                    <h2>Drive Details</h2>
+                    <p><strong>Company Name:</strong>
+                        <%= drive.company_name %>
+                    </p>
+                    <p><strong>Batch:</strong>
+                        <%= drive.batch %>
+                    </p>
+                    <p><strong>Eligibility 10th:</strong>
+                        <%= drive.eligibility_10th %> %
+                    </p>
+                    <p><strong>Eligibility 12th:</strong>
+                        <%= drive.eligibility_12th %> %
+                    </p>
+                    <p><strong>Eligibility CGPA:</strong>
+                        <%= drive.eligibility_cgpa %> CGPA
+                    </p>
+                    <p><strong>Package Type:</strong>
+                        <%= drive.package_type %> 
+                    </p>
+                    <p><strong>Package Amount:</strong>
+                        <%= drive.package_amount %> LPA
+                    </p>
+                    <p><strong>Bond:</strong>
+                        <%= drive.bond %>
+                    </p>
+                    <p><strong>Date of Drive:</strong>
+                        <%= new Date(drive.date_of_drive).toLocaleDateString() %>
+                    </p>
+                    <p><strong>Application Deadline:</strong>
+                        <%= new Date(drive.application_deadline).toLocaleDateString() %>
+                    </p>
+                    <p><strong>Job Location:</strong>
+                        <%= drive.job_location %>
+                    </p>
+                    <p><strong>Job Role:</strong>
+                        <%= drive.job_role %>
+                    </p>
+                    <p><strong>Job Description:</strong>
+                        <%= drive.job_description %>
+                    </p>
+                    <p><strong>Result Declared:</strong>
+                        <%= drive.drive_result_declared ? 'Yes' : 'No' %>
+                    </p>
+                </div>
+                <div class="drivebutton">
+                    <button id="viewApplied" onclick="viewAppliedStudents()">View Applied Students</button>
 
+                    <!-- Button to open create round modal -->
+                    <button id="createRoundBtn">Create Round</button>
+                </div>
+
+
+                <!-- Modal for creating a new round -->
+                <div id="createRoundModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <form id="createRoundForm">
+                            <input type="hidden" id="driveId" name="driveId" value="<%= drive.drive_id %>">
+                            <label for="roundName">Round Name:</label>
+                            <input type="text" id="roundName" name="roundName" required><br>
+                            <label for="roundDescription">Round Description:</label>
+                            <input type="text" id="roundDescription" name="roundDescription" required><br>
+                            <label for="roundDate">Round Date:</label>
+                            <input type="date" id="roundDate" name="roundDate" required><br>
+                            <button type="submit">Create Round</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Display all rounds -->
+                <h2>Rounds</h2>
+                <div id="roundsList" class="rounds-container">
+                    <!-- Rounds will be dynamically populated here -->
+                </div>
+
+                <button id="declareFinalResultBtn">Declare Final Result</button>
+            </div>
+    </section>
+
+    <script src="/js/nav.js"></script>
     <script>
 
         function viewAppliedStudents() {
@@ -154,7 +179,7 @@
                         roundDetails.innerHTML = `
                     <p><strong>Round Name:</strong> ${round.round_name}</p>
                     <p><strong>Round Description:</strong> ${round.round_description}</p>
-                    <p><strong>Round Date:</strong> ${round.round_date}</p>
+                    <p><strong>Round Date:</strong> ${new Date(round.round_date).toLocaleDateString()}</p>
                 `;
 
                         const shortlistButton = document.createElement('button');

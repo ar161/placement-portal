@@ -1,0 +1,137 @@
+/* Form container styles */
+.form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Error message styles */
+#error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+#success-message {
+    color: green;
+    margin-bottom: 15px;
+}
+
+/* Form input styles */
+#addProgramForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* Button styles */
+#addProgramForm button[type="submit"] {
+    border: none;
+    color: white;
+    background: #1560BD;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#addProgramForm button[type="submit"]:hover {
+    background: #0c4a8c;
+}
+
+/* Table styles */
+.form table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.form table th,
+.form table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.form table th {
+    background-color: #f5f5f5;
+}
+
+/* Edit and delete button styles */
+.action-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.edit-delete-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.editProgramForm {
+    display: flex;
+    justify-content: space-around;
+}
+
+.editProgramName {
+
+    border-radius: 5px;
+    height: 45px;
+    
+    flex: 1;
+    margin-right: 10px;
+    margin-top: 5px;
+
+}
+
+.editProgramName::placeholder {
+    /* Center the placeholder vertically */
+    line-height: 45px; /* Adjust this value to match the input height */
+    text-align: center; /* Center the text horizontally */
+    opacity: 0.6; /* Adjust placeholder opacity */
+}
+
+.edit-delete-buttons button {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px; /* Adjust spacing between buttons */
+    width: 45px; /* Set the width to match the height */
+    height: 45px; /* Make the buttons square */
+    border-radius: 5px;
+}
+
+button.edit {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    width: 45px; /* Set the width to match the height */
+    height: 45px; /* Make the buttons square */
+    margin: 5px;
+    cursor:pointer;
+}
+
+button.delete {
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 5px;
+    width: 45px; /* Set the width to match the height */
+    height: 45px; /* Make the buttons square */
+    cursor:pointer;
+}
+
+.edit-delete-buttons button:hover {
+    opacity: 0.8;
+}
