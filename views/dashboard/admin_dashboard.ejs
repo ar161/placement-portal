@@ -4,65 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="/css/common/dashboard-new.css">
+  <!----===== Iconscout CSS ===== -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="navbar-toggler" onclick="toggleSidebar()">
-    <span>&#9776;</span>
-  </div>
-  <div class="navbar-brand">
-    <span>Placement Portal</span>
-  </div>
-  <div class="navbar-user">
-    <span>Welcome, <%= user.username %></span>
-    <a href="/logout">Logout</a>
-  </div>
-</nav>
+  <%- include('../partials/nav-admin'); %>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-toggler" onclick="toggleSidebar()">
-      <span>&#9776;</span>
-    </div>
-    <span class="sidebar-brand">Placement Portal</span>
-  </div>
-  <ul class="sidebar-menu">
-    <li class="sidebar-item">
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Manage Users</span>
-        <span class="arrow">&#9660;</span>
+
+  <section class="dashboard">
+    <div class="top">
+      <i class="uil uil-bars sidebar-toggle"></i>
+
+      <div class="branding-box">Placement Portal</div>
+      <div class="user-box">
+        <i class="uil uil-user-circle user-circle"></i>
+        <span>
+          <%= user.username %>
+        </span>
       </div>
-      <ul class="submenu">
-        <li><a href="/admin/add_placement_officer">Add TPO</a></li>
-        <li><a href="/admin/view_tpo">View TPOs</a></li>
-      </ul>
-    </li>
-  </ul>
-</aside>
+    </div>
 
-<div class="main-content">
-  <!-- Your existing admin dashboard content goes here -->
-  <!-- ... -->
-</div>
+    <div class="dash-content">
+      <div class="overview">
+        <div class="title">
+          <i class="uil uil-tachometer-fast-alt"></i>
+          <span class="text">Dashboard</span>
+        </div>
 
-<script>
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
+        <div class="boxes">
+          <div class="box box1">
+            <i class="uil uil-user"></i>
+            <span class="text">Total Users</span>
+            <span class="number"><%= totalUsers %></span>
+          </div>
+          <div class="box box2">
+            <i class="uil uil-user-check"></i>
+            <span class="text">Total TPOs</span>
+            <span class="number"><%= totalTPOs %></span>
+          </div>
+          <div class="box box3">
+            <i class="uil uil-users-alt"></i>
+            <span class="text">Total Students</span>
+            <span class="number"><%= totalStudents %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  function toggleSubmenu(header) {
-    const submenu = header.nextElementSibling;
-    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-    header.classList.toggle('open');
-  }
+  <script src="/js/nav.js"></script>
 
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
-  
-</script>
 
 </body>
 </html>

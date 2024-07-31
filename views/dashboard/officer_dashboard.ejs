@@ -4,81 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Officer Dashboard</title>
-  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="/css/common/dashboard-new.css">
+   <!----===== Iconscout CSS ===== -->
+   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 <body>
+    
+    <%- include('../partials/nav-officer'); %>
 
-<nav class="navbar">
-  <div class="navbar-toggler" onclick="toggleSidebar()">
-    <span>&#9776;</span>
-  </div>
-  <div class="navbar-brand">
-    <span>Placement Portal</span>
-  </div>
-  <div class="navbar-user">
-    <span>Welcome, <%= user.username %></span>
-    <a href="/logout">Logout</a>
-  </div>
-</nav>
+  <section class="dashboard">
+    <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-toggler" onclick="toggleSidebar()">
-      <span>&#9776;</span>
+        <div class="branding-box">Placement Portal</div>
+        <div class="user-box">
+          <i class="uil uil-user-circle user-circle"></i>
+          <span> <%= user.username %> </span>
+        </div>
     </div>
-    <span class="sidebar-brand">Placement Portal</span>
-  </div>
-  <ul class="sidebar-menu">
-    <li class="sidebar-item">
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Manage Students</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-      <ul class="submenu">
-        <li><a href="/placement_officer/add_student">Add Students</a></li>
-        <li><a href="/placement_officer/edit_student_details">Edit Student Details</a></li>
-      </ul>
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Planning</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-      <ul class="submenu">
-        <li><a href="/placement_officer/program_planning/">Program Planning</a></li>
-        <li><a href="/placement_officer/stream_planning/">Stream Planning</a></li>
-      </ul>
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Manage Drives</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-      <ul class="submenu">
-        <li><a href="/placement_officer/create_drive/">Create Drive</a></li>
-        <li><a href="/placement_officer/manage_drives/">Manage Drives</a></li>
-      </ul>
-    </li>
-  </ul>
-</aside>
 
-<div class="main-content">
-  <!-- Your existing officer dashboard content goes here -->
-  <!-- ... -->
-</div>
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <i class="uil uil-tachometer-fast-alt"></i>
+                <span class="text">Dashboard</span>
+            </div>
 
-<script>
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
+            <div class="boxes">
+                <div class="box box1">
+                    <i class="uil uil-list-ul"></i>
+                    <span class="text">Total Drives</span>
+                    <span class="number"><%= totalDrives %></span>
+                </div>
+                <div class="box box2">
+                    <i class="uil uil-check-circle"></i>
+                    <span class="text">Drives Completed</span>
+                    <span class="number"><%=drivesCompleted %></span>
+                </div>
+                <div class="box box3">
+                    <i class="uil uil-users-alt"></i>
+                    <span class="text">Total Students</span>
+                    <span class="number"><%=totalStudents %></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  function toggleSubmenu(header) {
-    const submenu = header.nextElementSibling;
-    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-    header.classList.toggle('open');
-  }
+<script src="/js/nav.js"></script>
 
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
-  
-</script>
 
 </body>
 </html>

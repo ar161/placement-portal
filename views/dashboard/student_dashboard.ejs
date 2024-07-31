@@ -4,71 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard</title>
-  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="/css/common/dashboard-new.css">
+   <!----===== Iconscout CSS ===== -->
+   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+</head>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="navbar-toggler" onclick="toggleSidebar()">
-    <span>&#9776;</span>
-  </div>
-  <div class="navbar-brand">
-    <span>Placement Portal</span>
-  </div>
-  <div class="navbar-user">
-    <span>Welcome, <%= user.username %></span>
-    <a href="/logout">Logout</a>
-  </div>
-</nav>
+  <%- include('../partials/nav-student'); %>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-toggler" onclick="toggleSidebar()">
-      <span>&#9776;</span>
-    </div>
-    <span class="sidebar-brand">Placement Portal</span>
-  </div>
-  <ul class="sidebar-menu">
-    <li class="sidebar-item">
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Manage Student Data</span>
-        <span class="arrow">&#9660;</span>
+
+<section class="dashboard">
+  <div class="top">
+      <i class="uil uil-bars sidebar-toggle"></i>
+
+      <div class="branding-box">Placement Portal</div>
+      <div class="user-box">
+        <i class="uil uil-user-circle user-circle"></i>
+        <span> <%= user.username %> </span>
       </div>
-      <ul class="submenu">
-        <li><a href="/student/add_student_details">Enter Student Data</a></li>
-      </ul>
-      <div class="submenu-header" onclick="toggleSubmenu(this)">
-        <span>Manage Drives</span>
-        <span class="arrow">&#9660;</span>
-      </div>
-      <ul class="submenu">
-        <li><a href="/student/view_drive_list">View Drive List</a></li>
-      </ul>
-    </li>
-  </ul>
-</aside>
-
-<div class="main-content">
-  <!-- Your existing officer dashboard content goes here -->
-  <!-- ... -->
-</div>
-
-<script>
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
-
-  function toggleSubmenu(header) {
-    const submenu = header.nextElementSibling;
-    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-    header.classList.toggle('open');
-  }
-
-  function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('sidebar-expanded');
-  }
+  </div>
+  <div class="dash-content">
+    <div class="overview">
+        <div class="title">
+            <i class="uil uil-tachometer-fast-alt"></i>
+            <span class="text">Dashboard</span>
+        </div>
   
-</script>
+        <div class="boxes">
+            <div class="box box1">
+                <i class="uil uil-list-ul"></i>
+                <span class="text">Total Drives</span>
+                <span class="number"><%= totalDrives %></span>
+            </div>
+            <div class="box box2">
+                <i class="uil uil-check-square"></i>
+                <span class="text">Applied Drives</span>
+                <span class="number"><%= appliedDrives %></span>
+            </div>
+            <div class="box box3">
+                <i class="uil uil-calendar-alt"></i>
+                <span class="text">Upcoming Drives</span>
+                <span class="number"><%= upcomingDrives %></span>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="/js/nav.js"></script>
+
 
 </body>
 </html>
