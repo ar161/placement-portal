@@ -3,6 +3,7 @@ const driveModel = require('../../models/driveModel');
 const driveForModel = require('../../models/driveForModel');
 const programModel = require('../../models/programModel');
 const streamModel = require('../../models/streamModel');
+const mailController = require('../mailer/mailController');
 const db = require('../../config/db');
 
 exports.renderCreateDrive = (req, res) => {
@@ -23,9 +24,9 @@ exports.createDrive = async (req, res) => {
         const driveData = {
             company_name: company_name,
             batch: batch,
-            eligibility_10th: eligibility_10th || null,
-            eligibility_12th: eligibility_12th || null,
-            eligibility_cgpa: eligibility_cgpa || null,
+            eligibility_10th: eligibility_10th || 0,
+            eligibility_12th: eligibility_12th || 0,
+            eligibility_cgpa: eligibility_cgpa || 0,
             package_type: package_type,
             package_amount: package_amount,
             date_of_drive: date_of_drive,
@@ -71,6 +72,10 @@ exports.createDrive = async (req, res) => {
         await db.promise().commit();
 
         res.status(200).json({ success: 'Drive created successfully' });
+
+        // Send drive email
+        await mailController.sendDriveAnnouncementEmail(driveId, driveData);
+
     } catch (error) {
         // Rollback transaction on error
         await db.promise().rollback();

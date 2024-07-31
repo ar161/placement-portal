@@ -178,4 +178,43 @@ studentModel.checkDriveEligibility = async (studentId, driveId) => {
   }
 };
 
+// Function to get student email by student ID
+studentModel.getStudentEmailById = async (studentId) => {
+  try {
+      const query = 'SELECT email FROM students WHERE student_id = ?';
+      const [rows] = await db.promise().execute(query, [studentId]);
+      if (rows.length > 0) {
+          return rows[0].email;
+      }
+      return null; // Return null if student not found
+  } catch (error) {
+      throw error;
+  }
+};
+
+studentModel.getTotalStudents = async () => {
+  try {
+    const [result] = await db.promise().execute('SELECT COUNT(*) AS count FROM students');
+    return result[0].count;
+  } catch (error) {
+    throw new Error('Error fetching total students');
+  }
+};
+
+studentModel.getStudentEmailsForDrive = async (driveId) => {
+  try {
+    const query = `
+      SELECT DISTINCT s.email
+      FROM students AS s
+      JOIN drive_for AS df ON s.program_id = df.program_id AND s.stream_id = df.stream_id
+      WHERE df.drive_id = ?
+    `;
+    const [rows] = await db.promise().execute(query, [driveId]);
+    const studentEmails = rows.map(row => row.email);
+    return studentEmails;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = studentModel;

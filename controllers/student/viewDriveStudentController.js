@@ -5,6 +5,7 @@ const applicationsModel = require('../../models/applicationsModel');
 const roundModel = require('../../models/roundModel');
 const selectedModel = require('../../models/selectedModel');
 const studentModel = require('../../models/studentModel');
+const mailController = require('../mailer/mailController');
 // const driveForModel = require('../../models/driveForModel');
 
 // Controller function to render the student view drive page
@@ -171,6 +172,13 @@ exports.applyForDrive = async (req, res) => {
         const result = await applicationsModel.applyForDrive(driveId, studentId);
         if (result) {
             res.status(200).json({ success: 'Successfully Applied for Drive' });
+
+
+            // Send application confirmation email
+            const recipientEmail = await studentModel.getStudentEmailById(studentId);
+            await mailController.sendApplicationConfirmationEmail(recipientEmail, driveDetails);
+
+            
         } else {
             res.status(500).json({ error: 'Failed to apply for drive' });
         }
