@@ -5,23 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Student Details</title>
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="/css/officer/edit_student_details.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 
 <body>
-    <h1>Edit Student Details</h1>
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
 
-    <form id="fetch-form">
-        <label for="username">Enter Student Username:</label>
-        <input type="text" id="username" name="username" required>
-        <button type="submit">Fetch</button>
-    </form>
 
-    <form id="edit-form" style="display: none;">
-        <!-- This form will be dynamically filled based on fetched data -->
-    </form>
+    <%- include('../partials/nav-officer'); %>
 
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+    
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
+
+            </div>
+        </div>
+    
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-edit"></i>
+                    <span class="text">Edit Student Details</span>
+                </div>
+    
+                <div class="form">
+                    <div id="error-message" style="color: red;"></div>
+                    <div id="success-message" style="color: green;"></div>
+                
+                    <form id="fetch-form">
+                        <label for="username">Enter Student Username:</label>
+                        <input type="text" id="username" name="username" required>
+                        <button type="submit">Fetch</button>
+                    </form>
+                
+                    <form id="edit-form" style="display: none;">
+                        <!-- This form will be dynamically filled based on fetched data -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/nav.js"></script>
     <script>
         document.getElementById('fetch-form').addEventListener('submit', function (event) {
             event.preventDefault();

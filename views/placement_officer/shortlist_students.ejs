@@ -5,53 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shortlist Students</title>
-    <link rel="stylesheet" href="../../css/shortlist_students.css">
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="../../css/officer/shortlist_students.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 
 <body>
-    <h1>Shortlist Students</h1>
+    <%- include('../partials/nav-officer'); %>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+      
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
+              
+            </div>
+        </div>
+        <div class="dash-content" >
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-graduation-cap"></i>
+                    <span class="text">Shortlist Students</span>
+                </div>
 
-    <!-- Error and success messages -->
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
+                <!-- Error and success messages -->
+                <div id="error-message" style="color: red;"></div>
+                <div id="success-message" style="color: green;"></div>
 
-    <!-- Display drive and round details -->
-    <div class="details">
-        <h2>Drive Details</h2>
-        <p><strong>Company Name:</strong>
-            <%= drive.company_name %>
-        </p>
-        <p><strong>Date of Drive:</strong>
-            <%= drive.date_of_drive %>
-        </p>
-        <p><strong>Round Name:</strong>
-            <%= round.round_name %>
-        </p>
-        <p><strong>Round Date:</strong>
-            <%= round.round_date %>
-        </p>
-    </div>
+                <!-- Display drive and round details -->
+                <div class="details">
+                    <h2>Drive Details</h2>
+                    <p><strong>Company Name:</strong>
+                        <%= drive.company_name %>
+                    </p>
+                    <p><strong>Date of Drive:</strong>
+                        <%= new Date(drive.date_of_drive).toLocaleDateString() %>
+                    </p>
+                    <p><strong>Round Name:</strong>
+                        <%= round.round_name %>
+                    </p>
+                    <p><strong>Round Date:</strong>
+                        <%= new Date(round.round_date).toLocaleDateString() %>
+                    </p>
+                </div>
 
-    <!-- Display student list with checkboxes -->
-    <form id="shortlistForm">
-        <h2>Students</h2>
-        <!-- Display message if no students available -->
-        <% if (students.length===0) { %>
-            <p>
-                No students available to shortlist for this round.
-            </p>
-            <% } %>
-                <% students.forEach(student=> { %>
-                    <div class="student">
-                        <label>
-                            <input type="checkbox" name="selectedStudents" value="<%= student.student_id %>">
-                            <%= student.name %>
-                        </label>
-                    </div>
-                    <% }); %>
-                        <button type="submit">Shortlist Students</button>
-    </form>
+                <!-- Display student list with checkboxes -->
+                <form id="shortlistForm">
+                    <h2>Students</h2>
+                    <!-- Display message if no students available -->
+                    <% if (students.length===0) { %>
+                        <p>
+                            No students available to shortlist for this round.
+                        </p>
+                        <% } %>
+                            <% students.forEach(student=> { %>
+                                <div class="student">
+                                    <label>
+                                        <input type="checkbox" name="selectedStudents" value="<%= student.student_id %>">
+                                        <%= student.name %>
+                                    </label>
+                                </div>
+                                <% }); %>
+                                    <button type="submit">Shortlist Students</button>
+                </form>
+            </div>
+    </section>
 
+    <script src="/js/nav.js"></script>
     <script>
         document.getElementById('shortlistForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission

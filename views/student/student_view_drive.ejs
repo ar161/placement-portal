@@ -7,39 +7,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Drive</title>
-    <link rel="stylesheet" href="../../css/view_drive.css">
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="../../css/student/student_view_drive.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 
 <body>
-    <h1>View Drive</h1>
+    <%- include('../partials/nav-student'); %>
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+      
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
+              
+            </div>
+        </div>
+        <div class="dash-content" >
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-graduation-cap"></i>
+                    <span class="text">View Drive</span>
+                </div>
 
-    <!-- Error and success messages -->
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
+                <!-- Error and success messages -->
+                <div id="error-message" style="color: red;"></div>
+                <div id="success-message" style="color: green;"></div>
 
-    <div class="drive-details">
-        <h2>Drive Details</h2>
-        <p><strong>Company Name:</strong>
-            <%= drive.company_name %>
-        </p>
-    </div>
+                <div class="drive-details">
+                    <h2>Drive Details</h2>
+                    <p><strong>Company Name:</strong>
+                        <%= drive.company_name %>
+                    </p>
+                    <p><strong>Batch:</strong>
+                        <%= drive.batch %>
+                    </p>
+                    <p><strong>Date of Drive:</strong>
+                        <%= new Date(drive.date_of_drive).toLocaleDateString() %>
+                    </p>
+                    <p><strong>Job Location:</strong>
+                        <%= drive.job_location %>
+                    </p>
+                    <p><strong>Job Role:</strong>
+                        <%= drive.job_role %>
+                    </p>
+                    <p><strong>Job Description:</strong>
+                        <%= drive.job_description %>
+                    </p>
+                </div>
 
-    <button id="applyButton" <% if (appliedStatus) { %> disabled <% } %>> Apply </button>
+                <button id="applyButton" <% if (appliedStatus) { %> disabled <% } %>> Applied </button>
 
-    <!-- Display all rounds -->
-    <h2>Rounds</h2>
-    <div id="roundsList" class="rounds-container">
-        <!-- Rounds will be dynamically populated here -->
-    </div>
+                <!-- Display all rounds -->
+                <h2>Rounds</h2>
+                <div id="roundsList" class="rounds-container">
+                    <!-- Rounds will be dynamically populated here -->
+                </div>
 
-    <!-- Display final result -->
-    <h2>Final Result</h2>
-    <div id="finalResult">
-        <% if (!appliedStatus) { %>
-            <p>You have not applied for this drive yet.</p>
-            <% } %>
-    </div>
+                <!-- Display final result -->
+                <h2>Final Result</h2>
+                <div id="finalResult">
+                    <% if (!appliedStatus) { %>
+                        <p>You have not applied for this drive yet.</p>
+                        <% } %>
+                </div>
+            </div>
+        </section>
 
+    <script src="/js/nav.js"></script>    
     <script>
 
         // Fetch and display rounds
@@ -63,7 +100,7 @@
                     roundDetails.innerHTML = `
                 <p><strong>Round Name:</strong> ${round.round_name}</p>
                 <p><strong>Round Description:</strong> ${round.round_description}</p>
-                <p><strong>Round Date:</strong> ${round.round_date}</p>
+                <p><strong>Round Date:</strong> ${new Date(round.round_date).toLocaleDateString()}</p>
             `;
 
                     // Fetch round status only if applied and not rejected
@@ -125,14 +162,14 @@
                 // Check if final result status is available
                 if (finalResultStatus) {
                     if (finalResultStatus === 'Selected') {
-                        finalResultContainer.innerHTML = '<p>Congratulations! You have been selected for this drive.</p>';
+                        finalResultContainer.innerHTML = '<p style="color: green; font-weight: bold;">Congratulations! You have been selected for this drive.</p>';
                     } else if (finalResultStatus === 'Rejected') {
-                        finalResultContainer.innerHTML = '<p>We regret to inform you that you have not been selected for this drive.</p>';
+                        finalResultContainer.innerHTML = '<p style="color: red; font-weight: bold;">We regret to inform you that you have not been selected for this drive.</p>';
                     } else {
-                        finalResultContainer.innerHTML = '<p>The final result for this drive is not yet declared.</p>';
+                        finalResultContainer.innerHTML = '<p style="color: blue; font-weight: bold;">The final result for this drive is not yet declared.</p>';
                     }
                 } else {
-                    finalResultContainer.innerHTML = '<p>The final result for this drive is not yet available.</p>';
+                    finalResultContainer.innerHTML = '<p style="color: blue; font-weight: bold;">The final result for this drive is not yet available.</p>';
                 }
             } catch (error) {
                 console.error('Error displaying final result:', error);

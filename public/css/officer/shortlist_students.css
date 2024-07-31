@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+
+
+body {
+    /* font-family: Arial, sans-serif; */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+/* Error and success messages */
+#error-message, #success-message {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Drive and round details */
+.details {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.details h2 {
+    margin-top: 0;
+}
+
+.details p {
+    margin: 5px 0;
+}
+
+/* Student list */
+.student {
+    margin-bottom: 5px;
+}
+
+/* Form button */
+button[type="submit"] {
+    display: block;
+    margin: 20px auto; /* Center the button */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #1560BD;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0c4a8c;
+}
+
+
+/* Styles for the form */
+#shortlistForm {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+#shortlistForm h2 {
+    margin-top: 0;
+}
+
+.student {
+    margin-bottom: 5px;
+}
+
+/* Style for the submit button */
+#shortlistForm button[type="submit"] {
+    display: block;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #1560BD;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+#shortlistForm button[type="submit"]:hover {
+    background-color: #0c4a8c;
+}

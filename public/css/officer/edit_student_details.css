@@ -1,0 +1,70 @@
+#fetch-form,
+#edit-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Error message styles */
+#error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+#success-message {
+    color: green;
+    margin-bottom: 15px;
+}
+
+/* Form label styles */
+#fetch-form label,
+#edit-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Form input styles */
+#fetch-form input[type="text"],
+#fetch-form input[type="email"],
+#fetch-form input[type="number"],
+#edit-form input[type="text"],
+#edit-form input[type="email"],
+#edit-form input[type="number"],
+#edit-form select {
+    width: calc(100% - 20px); /* Adjust width to accommodate padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Form input styles for disabled inputs */
+#edit-form input[disabled] {
+    background-color: #f2f2f2;
+    color: #666666;
+}
+
+/* Button styles */
+#fetch-form button[type="submit"],
+#edit-form button[type="submit"] {
+    border: none;
+    color: white;
+    background: #1560BD;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#fetch-form button[type="submit"]:hover,
+#edit-form button[type="submit"]:hover {
+    background: #0c4a8c;
+}
+
+/* Hide edit form by default */
+#edit-form {
+    display: none;
+}

@@ -5,47 +5,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Student</title>
-  <link rel="stylesheet" href="../../css/dashboard.css">
+  <link rel="stylesheet" href="/css/common/dashboard-new.css">
+  <link rel="stylesheet" href="/css/officer/add_student.css">
+  <!----===== Iconscout CSS ===== -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 <body>
 
-  <nav class="navbar">
-    <!-- Include your navbar code here -->
-  </nav>
+  <%- include('../partials/nav-officer'); %>
 
-  <% if (error) { %>
-    <div style="color: red;"><%= error %></div>
-  <% } else if (success) { %>
-    <div style="color: green;"><%= success %></div>
-  <% } %>
+  <section class="dashboard">
+    <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
 
-  <div class="main-content">
-    <h1>Add Student</h1>
-    <form action="/placement_officer/add_student" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
-        <button type="submit">Add Student</button>
-    </form>
+        <div class="branding-box">Placement Portal</div>
+        <div class="user-box">
+          <i class="uil uil-user-circle user-circle"></i>
+        </div>
+    </div>
 
-    <!-- Button for uploading a file to add multiple students -->
-    <form id="fileForm" action="/placement_officer/add_students_from_file" method="POST" enctype="multipart/form-data">
-      <!-- File input for uploading an Excel file -->
-      <input type="file" id="filePicker" name="file" accept=".xlsx, .xls" style="display: none;">
-      <!-- Button for opening file picker and submitting the form -->
-      <button type="button" onclick="openFilePicker()">Add Students From File</button>
-    </form>
-    
-    <!-- Button for downloading the Excel template -->
-    <form method="get" action="../../ExcelTemplates/AddStudentTemplate.xlsx">
-      <button type="submit">Download Add Student Template</button>
-    </form>
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title" style="display:flex;justify-content:center;text-align: center;">
+                <i class="uil uil-user-plus"></i>
+                <span class="text" >Add Student</span>
+            </div>
 
-  </div>
+            <div class="form">
+              <% if (error) { %>
+                <div style="color: red;"><%= error %></div>
+              <% } else if (success) { %>
+                <div style="color: green;"><%= success %></div>
+              <% } %>
 
+              <form action="/placement_officer/add_student" method="post">
+                <label for="username" id="username-lbl">Username:</label>
+              
+                <input type="text" id="username" name="username" required><br>
+                
+                <label for="name" id="name-lbl" >Name : </label>
+                <input type="text" id="name" name="name" required><br>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br>
+                
+                <button type="submit" id="submitButton">Add Student</button>
+              </form>
+        
+              <div class="form-container">
+                <form id="fileForm" action="/placement_officer/add_students_from_file" method="POST" enctype="multipart/form-data">
+                  <!-- File input for uploading an Excel file -->
+                  <input type="file" id="filePicker" name="file" accept=".xlsx, .xls" style="display: none;">
+                  <!-- Button for opening file picker and submitting the form -->
+                  <button type="button" onclick="openFilePicker()" class="file-upload-button">Add Students From File</button>
+                </form>
+              
+                <!-- Button for downloading the Excel template -->
+                <form method="get" action="../../ExcelTemplates/AddStudentTemplate.xlsx">
+                  <button type="submit" class="download-button">Download Excel Template</button>
+                </form>
+              </div>
+            </div>
+          </div>
+    </div>
+  </section>
+  
+  <script src="/js/nav.js"></script>
   <script>
       function openFilePicker() {
         // Trigger click event on file input

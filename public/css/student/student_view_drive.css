@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+h1, h2 {
+    text-align: center;
+}
+
+/* Error and success messages */
+#error-message, #success-message {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Drive details */
+.drive-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.drive-details h2 {
+    margin-top: 0;
+}
+
+.drive-details p {
+    margin: 5px 0;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #8e9092;
+    color: white;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto; /* Horizontal centering */
+    margin-right: auto; /* Horizontal centering */
+
+}
+
+button:hover {
+    background-color: #808080;
+}
+
+/* Rounds section */
+.rounds-container {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.round-card {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.round-details p {
+    margin: 5px 0;
+}
+
+/* Final result section */
+#finalResult {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Message inside final result section */
+#finalResult p {
+    margin: 10px 0;
+}

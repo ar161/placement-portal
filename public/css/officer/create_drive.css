@@ -1,0 +1,86 @@
+/* Form container styles */
+.dash-content .form {
+    /* max-width: 1000px; */
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Error message styles */
+.dash-content #error-message {
+    color: #e74c3c; /* Red color for error message */
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+.dash-content #success-message {
+    color: #2ecc71; /* Green color for success message */
+    margin-bottom: 15px;
+}
+
+/* Form label styles */
+.dash-content label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Form input styles */
+.dash-content input[type="text"],
+.dash-content input[type="number"],
+.dash-content input[type="date"],
+.dash-content select,
+.dash-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Valid input styles */
+.dash-content input:valid,
+.dash-content select:valid,
+.dash-content textarea:valid {
+    border-color: #262827; /* Green border color for valid input */
+}
+
+/* Invalid input styles */
+.dash-content input:invalid,
+.dash-content select:invalid,
+.dash-content textarea:invalid {
+    border-color: #e74c3c; /* Red border color for invalid input */
+}
+
+.dash-content input#eligibility_10th:invalid,
+.dash-content input#eligibility_12th:invalid,
+.dash-content input#eligibility_cgpa:invalid {
+    border-color: #e74c3c; /* Red border color for invalid input */
+}
+
+/* Button styles */
+.dash-content button[type="submit"] {
+    border: none;
+    color: white;
+    background: #1560BD;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.dash-content button[type="submit"]:hover {
+    background: #0c4a8c;
+}
+
+/* Additional styles for select */
+.dash-content select {
+    width: 100%;
+}
+
+/* Additional styles for textarea */
+.dash-content textarea {
+    width: 100%;
+    height: 150px;
+    resize: vertical; /* Allow vertical resizing */
+}

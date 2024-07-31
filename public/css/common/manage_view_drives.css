@@ -1,0 +1,92 @@
+/* Style for tabs */
+.tab {
+  overflow: hidden;
+  background-color: #fff;
+  
+}
+
+/* Style for tab buttons */
+.tab button {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  border-radius: 0.8rem;
+  color: #707070;
+  margin-left: 10px;
+  font-size:16px;
+}
+
+.tab button:first-of-type {
+  margin-left: 0px;
+}
+
+/* Change background color of tab buttons on hover */
+.tab button:hover {
+  background-color:#ccc;
+  color: var(--primary-color);
+}
+
+/* Style for active tab button */
+.tab button.active {
+  background-color:var(--primary-color);
+  color: #fff;
+  transition: 0.5s ease;
+}
+
+/* Style for tab content */
+.tabcontent {
+  display: none;
+  padding-top: 15px;
+  padding-left: 15px;
+}
+
+/* Style for card container */
+.drive-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* Style for individual card */
+.drive-card {
+  width: 80%;
+  margin: 20px 20px 20px 0px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Style for card title */
+.drive-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Style for card content */
+.drive-card p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Style for view drive button */
+.drive-card button {
+  background-color: #21d128;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+  float: right;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Change background color of view drive button on hover */
+.drive-card button:hover {
+  background-color: #45a049;
+}

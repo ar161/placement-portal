@@ -4,30 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Drives</title>
-    <link rel="stylesheet" href="../../css/manage_drives.css">
+    <title>View Drives</title>
+
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="/css/common/manage_view_drives.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 
 <body>
-    <h1>Manage Drives</h1>
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'upcomingDrives')">Upcoming Drives</button>
-        <button class="tablinks" onclick="openTab(event, 'appliedDrives')">Applied Drives</button>
-    </div>
 
-    <div id="upcomingDrives" class="tabcontent drives-container">
-        <h2>Upcoming Drives</h2>
-        <div id="upcomingDrivesList" class="drive-list">
-            <!-- Upcoming drives will be dynamically populated here -->
-        </div>
-    </div>
-    <div id="appliedDrives" class="tabcontent drives-container">
-        <h2>Applied Drives</h2>
-        <div id="appliedDrivesList" class="drive-list">
-            <!-- Applied drives will be dynamically populated here -->
-        </div>
-    </div>
+    <%- include('../partials/nav-student'); %>
 
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+                <i class="uil uil-user-circle user-circle"></i>
+            </div>
+        </div>
+
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-eye"></i>
+                    <span class="text">View Drives</span>
+                </div>
+
+                <!--Main Content-->
+                <div class="tab">
+                    <button class="tablinks" onclick="openTab(event, 'upcomingDrives')">Upcoming Drives</button>
+                    <button class="tablinks" onclick="openTab(event, 'appliedDrives')">Applied Drives</button>
+                </div>
+
+                <div id="upcomingDrives" class="tabcontent drives-container">
+                    <h2>Upcoming Drives</h2>
+                    <div id="upcomingDrivesList" class="drive-list">
+                        <!-- Upcoming drives will be dynamically populated here -->
+                    </div>
+                </div>
+                <div id="appliedDrives" class="tabcontent drives-container">
+                    <h2>Applied Drives</h2>
+                    <div id="appliedDrivesList" class="drive-list">
+                        <!-- Applied drives will be dynamically populated here -->
+                    </div>
+                </div>
+                <!--Main Content End-->
+            </div>
+        </div>
+    </section>  
+
+    <script src="/js/nav.js"></script>
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
@@ -82,8 +111,11 @@
             .catch(error => console.error('Error fetching applied drives:', error));
 
         function viewDrive(driveId) {
-            // Redirect to view drive page with driveId as query parameter
-            window.location.href = `/student/view_drive?driveId=${driveId}`;
+            // // Redirect to view drive page with driveId as query parameter
+            // window.location.href = `/student/view_drive?driveId=${driveId}`;
+
+            // Open the link in a new tab with the specified URL
+            window.open(`/student/view_drive?driveId=${driveId}`, '_blank');
         }
     </script>
 </body>

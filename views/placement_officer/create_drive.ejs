@@ -5,69 +5,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Drive</title>
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="/css/officer/create_drive.css">
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+ </head>
 </head>
 
 <body>
-    <h1>Create Drive</h1>
-    <div id="error-message" style="color: red;"></div>
-    <div id="success-message" style="color: green;"></div>
-    <form id="driveForm">
-        <label for="company_name">Company Name:</label>
-        <input type="text" id="company_name" name="company_name" required><br>
 
-        <label for="batch">Batch:</label>
-        <input type="number" id="batch" name="batch" placeholder="Batch for which the drive is applicable" required><br>
+    
 
-        <label for="programs">Select Programs:</label>
-        <select id="programs" name="programs[]" multiple required class>
-            <!-- Options will be populated dynamically -->
-        </select><br>
+    <%- include('../partials/nav-officer'); %>
 
-        <label for="streams">Select Streams:</label>
-        <select id="streams" name="streams[]" multiple required class>
-            <!-- Options will be populated dynamically -->
-        </select><br>
+      <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+    
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
 
-        <label for="eligibility_10th">Minimum Eligibility 10th:</label>
-        <input type="number" step="0.01" id="eligibility_10th" name="eligibility_10th" required><br>
-
-        <label for="eligibility_12th">Minimum Eligibility 12th:</label>
-        <input type="number" step="0.01" id="eligibility_12th" name="eligibility_12th" required><br>
-
-        <label for="eligibility_cgpa">Minimum Eligibility CGPA:</label>
-        <input type="number" step="0.01" id="eligibility_cgpa" name="eligibility_cgpa" required><br>
-
-        <label for="package_type">Package Type:</label>
-        <select id="package_type" name="package_type" required>
-            <option value="fix">Fix</option>
-            <option value="range">Range</option>
-        </select><br>
-
-        <div id="packageAmountContainer">
-            <!-- Additional input fields for package amount range will be dynamically added here if "Range" is selected -->
+            </div>
         </div>
+    
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-focus-add"></i>
+                    <span class="text">Create Drive</span>
+                </div>
+    
+                <div class="form">
+                    <div id="error-message" style="color: red;"></div>
+                    <div id="success-message" style="color: green;"></div>
+                    <form id="driveForm">
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" id="company_name" name="company_name" required placeholder="Enter Company Name"><br>
+                
+                        <label for="batch">Batch:</label>
+                        <input type="number" id="batch" name="batch" placeholder="Batch for which the drive is applicable" required><br>
+                
+                        <label for="programs">Select Programs:</label>
+                        <select id="programs" name="programs[]" multiple required class>
+                             <!-- Options will be populated dynamically  -->
+                        </select><br>
 
-        <label for="date_of_drive">Date of Drive:</label>
-        <input type="date" id="date_of_drive" name="date_of_drive" required><br>
+                        
 
-        <label for="application_deadline">Application Deadline:</label>
-        <input type="date" id="application_deadline" name="application_deadline" required><br>
+                
+                        <label for="streams">Select Streams:</label>
+                        <select id="streams" name="streams[]" multiple required class>
+                            <!-- Options will be populated dynamically -->
+                        </select><br>
+                
+                        <label for="eligibility_10th">Minimum Eligibility 10th:</label>
+                        <input type="number" step="0.01" id="eligibility_10th" name="eligibility_10th" placeholder="Enter 10th%"><br>
+                
+                        <label for="eligibility_12th">Minimum Eligibility 12th:</label>
+                        <input type="number" step="0.01" id="eligibility_12th" name="eligibility_12th" placeholder="Enter 12th%"><br>
+                
+                        <label for="eligibility_cgpa">Minimum Eligibility CGPA:</label>
+                        <input type="number" step="0.01" id="eligibility_cgpa" name="eligibility_cgpa" placeholder="Enter CGPA"><br>
+                
+                        <label for="package_type">Package Type:</label>
+                        <select id="package_type" name="package_type" required>
+                            <option value="fix">Fix</option>
+                            <option value="range">Range</option>
+                        </select><br>
+                
+                        <div id="packageAmountContainer">
+                            <!-- Additional input fields for package amount range will be dynamically added here if "Range" is selected -->
+                        </div>
+                
+                        <label for="date_of_drive">Date of Drive:</label>
+                        <input type="date" id="date_of_drive" name="date_of_drive" required placeholder="Enter Date"><br>
+                
+                        <label for="application_deadline">Application Deadline:</label>
+                        <input type="date" id="application_deadline" name="application_deadline" required><br>
+                
+                        <label for="bond">Bond (in years):</label>
+                        <input type="number" id="bond" name="bond" placeholder="Number of years of bond (if any)"><br>
+                
+                        <label for="job_location">Job Location:</label>
+                        <input type="text" id="job_location" name="job_location" placeholder="Job location" required><br>
+                
+                        <label for="job_role">Job Role:</label>
+                        <input type="text" id="job_role" name="job_role" required placeholder="Enter Job Role"><br>
+                
+                        <label for="job_description">Job Description:</label><br>
+                        <textarea id="job_description" name="job_description" required placeholder="Enter job description here..."></textarea><br>
+                
+                        <button type="submit">Create Drive</button>
+                    </form>
+                
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <label for="bond">Bond (in years):</label>
-        <input type="number" id="bond" name="bond" placeholder="Number of years of bond (if any)"><br>
-
-        <label for="job_location">Job Location:</label>
-        <input type="text" id="job_location" name="job_location" placeholder="Job location" required><br>
-
-        <label for="job_role">Job Role:</label>
-        <input type="text" id="job_role" name="job_role" required><br>
-
-        <label for="job_description">Job Description:</label><br>
-        <textarea id="job_description" name="job_description" required></textarea><br>
-
-        <button type="submit">Create Drive</button>
-    </form>
-
+    <script src="/js/nav.js"></script>
     <script>
         // Cache for fetched streams data
         const streamsCache = {};

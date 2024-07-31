@@ -1,0 +1,124 @@
+/* Form container styles */
+.form {
+    max-width: 1000px; /* Increased width */
+    margin: auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    display: grid; /* Using grid layout for two-row form */
+    grid-template-columns: repeat(1, 1fr); /* one columns */
+    grid-gap: 20px; /* Gap between rows */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Label styles */
+.form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input field styles */
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="number"],
+.form select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc; /* Default border color */
+    border-radius: 10px;
+}
+.form input{
+    border-radius: 10px;
+}
+
+/* Error message styles */
+.form .error-message {
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+.form .success-message {
+    background-color: #e6ffe6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Validation styles */
+.form input:invalid {
+    border: 2px solid red;
+}
+
+/* .form input:invalid:required {
+    background-image: linear-gradient(to right, pink, lightgreen);
+} */
+
+.form input:valid {
+    border: 2px solid black;
+}
+
+
+/* Enabled button */
+button#submitButton {
+    border: none;
+    color: white;
+    background: #1560BD; /* Blue background color */
+    padding: 10px 25px; /* Adjust padding as needed */
+    border-radius: 10px;
+    display: block;
+    margin-left: 353px;
+    width: 150px;
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+button#submitButton:hover {
+    background: #0c4a8c; /* Darker blue color on hover */
+}
+
+/* Disabled button */
+button#disabledButton {
+    border: none;
+    color: #a0a0a0; /* Gray color for disabled button text */
+    background: #e0e0e0; /* Light gray background color */
+    padding: 10px 25px; /* Adjust padding as needed */
+    border-radius: 10px;
+    display: block;
+    margin: 20px auto 10px auto;
+    width: 120px;
+    cursor: not-allowed; /* Change cursor to not-allowed for disabled button */
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+}
+
+.file-upload-button {
+    background-color: rgb(26, 172, 53);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 40px;
+    margin-left: 6cm;
+}
+.file-upload-button:hover{
+    background-color: rgb(33, 105, 46);
+}
+.download-button {
+    background-color: rgb(122, 47, 180);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.download-button:hover{
+    background-color: rgb(110, 60, 148);
+}

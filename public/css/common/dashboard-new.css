@@ -281,17 +281,44 @@ nav.close ~ .dashboard .top{
 .activity .activity-data{
     display: flex;
 }
+
+.activity .activity-data-data{
+    display: flex;
+}
+
 .activity-data .data{
     display: flex;
     flex-direction: column;
     margin: 0 15px;
 }
+
+.activity-data-data .data{
+    display: flex;
+    flex-direction: column;
+    margin: 0 12px;
+}
+
 .activity-data .data-title{
     font-size: 20px;
     font-weight: 500;
     color: var(--text-color);
 }
+
+.activity-data-data .data-title{
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
 .activity-data .data .data-list{
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 20px;
+    white-space: nowrap;
+    color: var(--text-color);
+}
+
+.activity-data-data .data .data-list{
     font-size: 18px;
     font-weight: 400;
     margin-top: 20px;
