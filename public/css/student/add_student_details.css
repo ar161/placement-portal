@@ -1,0 +1,162 @@
+/* Form container styles */
+.form {
+    /* max-width: 1000px; Increased width */
+    /* margin: auto; */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 25px;
+   
+}
+
+/* Label styles */
+.form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input field styles */
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="number"],
+.form select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc; /* Default border color */
+    border-radius: 10px;
+}
+.form input{
+    border-radius: 10px;
+}
+
+/* Error message styles */
+.form .error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+
+/* Success message styles */
+.form .success-message {
+    margin-bottom: 15px;
+    color: #2ecc71;
+}
+
+/* Validation styles */
+.form input:invalid {
+    border: 1px solid red;
+    opacity: 0.7;
+}
+
+/* .form input:invalid:required {
+    background-image: linear-gradient(to right, pink, lightgreen);
+} */
+
+.form input:valid {
+    border: 2px solid black;
+}
+
+
+/* Enabled button */
+button#submitButton {
+    border: none;
+    color: white;
+    background: #1560BD; /* Blue background color */
+    padding: 10px 25px; /* Adjust padding as needed */
+    border-radius: 5px;
+    display: block;
+    margin: 20px auto 10px auto;
+    width: 120px;
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+button#submitButton:hover {
+    background: #0c4a8c; /* Darker blue color on hover */
+}
+
+/* Disabled button */
+button#disabledButton {
+    border: none;
+    color: #a0a0a0; /* Gray color for disabled button text */
+    background: #e0e0e0; /* Light gray background color */
+    padding: 10px 25px; /* Adjust padding as needed */
+    border-radius: 5px;
+    display: block;
+    margin: 20px auto 10px auto;
+    width: 120px;
+    cursor: not-allowed; /* Change cursor to not-allowed for disabled button */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+Style for the form container
+.form-design {
+    max-width: 500px;
+    margin: auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+Style for labels
+.form-design label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+Style for input fields
+.form-design input[type="text"],
+.form-design input[type="email"],
+.form-design input[type="number"],
+.form-design select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+Style for error message
+div[style*='color:red'] {
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+Style for success message
+div[style*='color:green'] {
+    background-color: #e6ffe6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+Validation styles
+input:invalid {
+    border: 2px dashed red;
+}
+
+input:invalid:required {
+    background-image: linear-gradient(to right, pink, lightgreen);
+}
+
+input:valid {
+    border: 2px solid black;
+} */

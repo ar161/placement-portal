@@ -5,48 +5,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Details Form</title>
+    <link rel="stylesheet" href="/css/common/dashboard-new.css">
+    <link rel="stylesheet" href="/css/student/add_student_details.css">
+   <!----===== Iconscout CSS ===== -->
+   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 </head>
 <body>
-    <h1>Enter Student Details</h1>
-    <% if (error) { %>
-        <div style="color: red;"><%= error %></div>
-    <% } else if (success) { %>
-        <div style="color: green;"><%= success %></div>
-    <% } %>
-    <form action="/student/add_student_details" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="<%= student ? student.name : '' %>" disabled><br>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="<%= student ? student.username : '' %>" disabled><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<%= student ? student.email : '' %>" disabled><br>
-        <label for="batch">Batch:</label>
-        <input type="text" id="batch" name="batch" value="<%= isMaster && student ? student.batch : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
-        <label for="program">Program:</label>
-        <select id="program" name="program" <% if (isMaster) { %>disabled<% } %> required>
-            <option value="">Select Program</option>        </select><br>
-        <label for="stream">Stream:</label>
-        <select id="stream" name="stream" <% if (isMaster) { %>disabled<% } %> required>
-            <option value="">Select Stream</option>
-        </select><br>
-        <label for="cgpa">CGPA:</label>
-        <input type="number" step="0.01" id="cgpa" name="cgpa" value="<%= isMaster && student ? student.cgpa : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
-        <label for="backlogs">Backlogs:</label>
-        <input type="number" id="backlogs" name="backlogs" value="<%= isMaster && student ? student.backlogs : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
-        <label for="tenth_percent">Tenth Percent:</label>
-        <input type="number" step="0.01" id="tenth_percent" name="tenth_percent" value="<%= isMaster && student ? student.tenth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
-        <label for="twelfth_percent">Twelfth Percent:</label>
-        <input type="number" step="0.01" id="twelth_percent" name="twelth_percent" value="<%= isMaster && student ? student.twelth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
-        <% if (!isMaster) { %>
-          <!-- Render the button if the user is not a master -->
-          <button type="submit" id="submitButton">Submit</button>
-        <% } else { %>
-          <!-- Render a disabled button if the user is a master -->
-          <button type="button"id="disabledButton">Submit</button>
-        <% } %>
-    </form>
-    <div id="message" style="display: none; color: red;">Data already submitted. Please contact TPO.</div>
+    
+    <%- include('../partials/nav-student'); %>
 
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+      
+            <div class="branding-box">Placement Portal</div>
+            <div class="user-box">
+              <i class="uil uil-user-circle user-circle"></i>
+              
+            </div>
+        </div>
+        <div class="dash-content" >
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-graduation-cap"></i>
+                    <span class="text">Enter Your Details</span>
+                </div>
+                <div class="form">
+                    <!-- <h1>Enter Student Details</h1> -->
+                    <% if (error) { %>
+                        <div class="error-message" style="color: red;"><%= error %></div>
+                    <% } else if (success) { %>
+                        <div class="success-message" style="color: green;"><%= success %></div>
+                    <% } %>
+                    <div class="error-message" id="message" style="display: none; color: red;">Data already submitted. Please contact TPO.</div>
+                    <form action="/student/add_student_details" method="post">
+                        <label for="name" id="name-lbl">Name : </label>
+                        <input type="text" id="name" name="name" value="<%= student ? student.name : '' %>" disabled><br>
+                        <label for="username" id="username-lbl">Username:</label>
+                        <input type="text" id="username" name="username" value="<%= student ? student.username : '' %>" disabled><br>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="<%= student ? student.email : '' %>" disabled><br>
+                        <label for="batch">Batch:</label>
+                        <input type="text" id="batch" name="batch" value="<%= isMaster && student ? student.batch : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+                        <label for="program">Program:</label>
+                        <select id="program" name="program" <% if (isMaster) { %>disabled<% } %> required>
+                            <option value="">Select Program</option>        </select><br>
+                        <label for="stream">Stream:</label>
+                        <select id="stream" name="stream" <% if (isMaster) { %>disabled<% } %> required>
+                            <option value="">Select Stream</option>
+                        </select><br>
+                        <label for="cgpa">CGPA:</label>
+                        <input type="number" step="0.01" id="cgpa" name="cgpa" value="<%= isMaster && student ? student.cgpa : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+                        <label for="backlogs">Backlogs:</label>
+                        <input type="number" id="backlogs" name="backlogs" value="<%= isMaster && student ? student.backlogs : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+                        <label for="tenth_percent">Tenth Percent:</label>
+                        <input type="number" step="0.01" id="tenth_percent" name="tenth_percent" value="<%= isMaster && student ? student.tenth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+                        <label for="twelfth_percent">Twelfth Percent:</label>
+                        <input type="number" step="0.01" id="twelth_percent" name="twelth_percent" value="<%= isMaster && student ? student.twelth_percent : '' %>" <% if (isMaster) { %>disabled<% } %> required><br>
+
+                        <% if (!isMaster) { %>
+                          <!-- Render the button if the user is not a master -->
+                          <button type="submit" id="submitButton">Submit</button>
+                        <% } else { %>
+                          <!-- Render a disabled button if the user is a master -->
+                          <button type="button"id="disabledButton">Submit</button>
+                        <% } %>
+                    </form>
+                </div>
+    </section>
+
+    <script src="/js/nav.js"></script>
     <script>
         // Add event listener to the disabled button if it exists
         const disabledButton = document.getElementById('disabledButton');
