@@ -59,7 +59,17 @@ const userModel = {
         }
         callback(null, results[0].user_id); // Return user_id
     });
+  },
+
+  getTotalUsers : async () => {
+    try {
+      const [result] = await db.promise().execute('SELECT COUNT(*) AS count FROM users');
+      return result[0].count;
+    } catch (error) {
+      throw new Error('Error fetching total users');
+    }
   }
+
 };
 
 module.exports = userModel;

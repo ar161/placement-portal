@@ -35,7 +35,17 @@ const tpoModel = {
   getAllTPOs: (callback) => {
     const query = 'SELECT * FROM placement_officers';
     db.query(query, callback);
+  },
+
+  getTotalTPOs : async () => {
+    try {
+      const [result] = await db.promise().execute('SELECT COUNT(*) AS count FROM placement_officers');
+      return result[0].count;
+    } catch (error) {
+      throw new Error('Error fetching total TPOs');
+    }
   }
+
 };
 
 module.exports = tpoModel;

@@ -164,4 +164,90 @@ driveModel.getFinalResultStatus = async (studentId, driveId) => {
     }
 };
 
+driveModel.getTotalDrivesCountForUser = async (userId) => {
+    try {
+      const query = `
+        SELECT COUNT(*) AS count
+        FROM drives AS d
+        JOIN drive_for AS df ON d.drive_id = df.drive_id
+        WHERE df.program_id = (
+          SELECT s.program_id
+          FROM students AS s
+          WHERE s.user_id = ?
+        ) AND df.stream_id = (
+          SELECT s.stream_id
+          FROM students AS s
+          WHERE s.user_id = ?
+        )
+      `;
+      const [result] = await db.promise().execute(query, [userId, userId]);
+      return result[0].count;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  driveModel.getAppliedDrivesCount = async (userId) => {
+    try {
+      const query = `
+        SELECT COUNT(*) AS count
+        FROM applications
+        WHERE student_id = (
+            SELECT s.student_id
+            FROM students AS s
+            WHERE s.user_id = ?
+        )
+      `;
+      const [result] = await db.promise().execute(query, [userId]);
+      return result[0].count;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  driveModel.getUpcomingDrivesCount = async (userId) => {
+    try {
+      const query = `
+        SELECT COUNT(*) AS count
+        FROM drives AS d
+        JOIN drive_for AS df ON d.drive_id = df.drive_id
+        JOIN students AS s ON s.program_id = df.program_id AND s.stream_id = df.stream_id
+        WHERE d.application_deadline > NOW() AND s.user_id = ?
+      `;
+      const [result] = await db.promise().execute(query, [userId]);
+      return result[0].count;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  driveModel.getTotalDrivesCount = async () => {
+    try {
+      const query = `
+        SELECT COUNT(*) AS count
+        FROM drives
+      `;
+      const [rows] = await db.promise().execute(query);
+      const [{ count }] = rows;
+      return count;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  driveModel.getCompletedDrivesCount = async () => {
+    try {
+      const query = `
+        SELECT COUNT(*) AS count
+        FROM drives
+        WHERE drive_result_declared = 1
+      `;
+      const [rows] = await db.promise().execute(query);
+      const [{ count }] = rows;
+      return count;
+    } catch (error) {
+      throw error;
+    }
+  };
+
 module.exports = driveModel;
